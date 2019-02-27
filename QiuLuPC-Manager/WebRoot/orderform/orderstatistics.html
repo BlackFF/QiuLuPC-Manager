@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>订单统计</title>
+<link rel="stylesheet" href="../css/layui.css" media="all" />
+<link rel="stylesheet" href="../css/global.css" media="all">
+<link href="../date/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" media="all"
+	href="../date/daterangepicker-bs3.css" />
+<script type="text/javascript" src="../date/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="../date/moment.js"></script>
+<script type="text/javascript" src="../date/daterangepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="../css/main.css" />
+<!-- <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js">
+</script> -->
+<script type="text/javascript">
+	$(function(){
+		var time;
+		var startTime;
+		var endTime;
+		var start;
+		var end;
+		var pageFunction = function(result){
+			if(result.status){
+				var orders = result.object.list;
+				var orderView = "";
+				for(var i = 0; i < orders.length; i ++){
+					orderView = orderView + "<tr><td>"+orders[i].id
+					+ "</td><td>" + orders[i].total+"元</td><td>"
+					+ orders[i].endTime +"</td></tr>";
+				}
+				if(!result.object.hasPrePage){
+					$("#pre")[0].disabled=true;
+				} else {
+					$("#pre")[0].disabled=false;
+				}
+				if(!result.object.hasNextPage){
+					$("#next")[0].disabled=true;
+				} else {
+					$("#next")[0].disabled=false;  
+				}
+				totel = result.object.totalPage;
+				curpage = result.object.beginPage;
+				$("#totle")[0].innerHTML="共"+result.object.totalPage+"页,当前"+result.object.beginPage+"页";
+				$("#context").empty();
+				$("#context").append(orderView);
+			}
+		}
+		var showPageFunction = {
+		};
+		var orderPage = {
+				getOrder:function(pageNumber){
+					$("#context").empty();
+					$("#label")[0].innerHTML =0;
+					$.post("/QiuLuPC-Manager/order/list",{"pageNumber":pageNumber,"status":3},function(result){
+						pageFunction(result);
+						showPageFunction.getOrder = function(pageNumber){
+							orderPage.getOrder(pageNumber);
+						}
+						$.post("/QiuLuPC-Manager/order/total",{"status":3},function(result){
+								var totel = result.object;
+								$("#label")[0].innerHTML = totel/100+"元";
+						})
+					});
+				},
+				getOrderByScope:function(pageNumber){
+					$("#context").empty();
+					$("#label")[0].innerHTML =0;
+					$.post("/QiuLuPC-Manager/order/dateScope",{"pageNumber":pageNumber,"beginDate":start,"endDate":end},function(result){
+						pageFunction(result);
+						showPageFunction.getOrder = function(pageNumber){
+							orderPage.getOrderByScope(pageNumber);
+						}
+						$.post("/QiuLuPC-Manager/order/date",{"beginDate":start,"endDate":end},function(result){
+							var totel = result.object;
+							$("#label")[0].innerHTML = totel/100+"元";
+						})
+					});
+				}
+		};
+		orderPage.getOrder(1);
+		$("#query").click(function(){
+			time = $("#reservation").val();
+			startTime = time.substr(0,10);
+			endTime = time.substr(12,21);
+			start = Date.parse(new Date(startTime));
+			end = Date.parse(new Date(endTime));
+			orderPage.getOrderByScope(1);
+		});
+		$("#first").click(function(){
+			showPageFunction.getOrder(1);
+		});
+		$("#last").click(function(){
+			showPageFunction.getOrder(totel);
+		});
+		$("#pre").click(function(){
+			showPageFunction.getOrder(curpage-1);
+		});
+		$("#next").click(function(){
+			showPageFunction.getOrder(curpage+1);
+		});
+		$("#skip").click(function(){
+			var pageNumber = $("#page").val();
+			if(isPositiveNum(pageNumber) && pageNumber　>= 1 &&　pageNumber <= totel){
+				showPageFunction.getOrder(pageNumber);
+			} else {
+				alert("输入不合法！");
+			}
+		});
+	});
+</script>
+</head>
+<body>
+	<div class="location">管理中心-订单统计</div>
+	<div class="main">
+		<div class="serchs">
+			<form class="form-horizontal" style="margin-left: 15px;">
+				<fieldset>
+					<div class="control-group">
+						<div class="input-prepend input-group" id="topContext">
+							起始时间：<input type="text" readonly style="width: 200px"
+								name="reservation" id="reservation" class="form-control"
+								value="2017-01-21 - 2017-02-21" />&nbsp;&nbsp;<input type="button" class="btn" value="查询" id="query">&nbsp;&nbsp;
+							总金额：<label id="label"></label>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+		<div class="commodity-list">
+			<div class="layui-field-box">
+				<table class="site-table table-hover">
+					<thead>
+						<tr>
+							<th style="text-align: center;">订单号</th>
+							<th style="text-align: center;">金额</th>
+							<th style="text-align: center;">完成时间</th>
+						</tr>
+					</thead>
+					<tbody id="context">
+						<tr>
+							<td>444</td>
+							<td>2000.00</td>
+							<td>2017-3-28 15:40:33</td>
+						</tr>
+						<tr>
+							<td>445</td>
+							<td>20.00</td>
+							<td>2017-3-28 15:40:24</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="btn_changepage">
+					<a id="totle"></a> <input type="button" name="" id="first"
+						value="首页" class="btn" /> <input type="button" name="" id="pre"
+						value="上一页" class="btn" /> <input type="button" name="" id="next"
+						value="下一页" class="btn" /> <input type="button" name="" id="last"
+						value="尾页" class="btn" /> <input type="text" name="" id="page"
+						value="" style="width: 40px;" /> <input type="button" name=""
+						id="skip" value="跳转" class="btn" />
+				</div>
+				<div class="layui-clear"></div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		$(document).ready(
+				function() {
+					$('#reservation').daterangepicker(
+							null,
+							function(start, end, label) {
+								console.log(start.toISOString(), end
+										.toISOString(), label);
+							});
+				});
+	</script>
+</body>
+</html>

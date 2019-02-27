@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+
+		"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+    <session-factory>
+    	<!-- 配置 hibernate 的基本属性 -->
+    
+    	<!-- 方言 -->
+    	<property name="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
+    	
+    	<!-- 是否显示及格式化 SQL -->
+    	<property name="hibernate.show_sql">true</property>
+    	<property name="hibernate.format_sql">true</property>
+    	
+    	<!-- 自动创建表 
+    	
+    	validate           加载hibernate时，验证创建数据库表结构
+        create             加载hibernate，重新创建数据库表结构
+        create-drop        加载hibernate时创建，退出是删除表结构
+        update             加载hibernate自动更新数据库结构
+    	-->
+    	
+    	<property name="hibernate.hbm2ddl.auto" value="create" />
+    	
+    
+    	<!-- 生成数据表的策略 -->
+    	
+    	
+    	<!-- 二级缓存相关 -->
+    	
+
+    </session-factory>
+    
+
+</hibernate-configuration>

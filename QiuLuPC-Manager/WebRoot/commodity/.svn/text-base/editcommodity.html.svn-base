@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>编辑商品</title>
+		<link rel="stylesheet" type="text/css" href="../css/main.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/classify.css"/>
+		<link rel="stylesheet" href="../css/layui.css" media="all" />
+		<link rel="stylesheet" href="../css/global.css" media="all">
+		<script src="../js/jquery-3.2.0.min.js"></script>
+		<script src="../layui/layui.js"></script>
+	</head>
+	<body>
+		<div class="show">
+			商品编辑
+		</div>
+		<div class="commodity-list">
+				<div class="layui-field-box">
+					<table class="site-table table-hover sku-table">
+						<thead>
+							<tr>
+							
+							</tr>
+						</thead>
+						<tbody>
+							
+						</tbody>
+					</table>
+				</div>
+			</div>
+		<div class="connect">
+			<form action="" method="post" class="addclass layui-form">
+				<table cellspacing="0" class="contable" >
+					<tbody>
+					<tr>
+						<td class="tdleft">商品名称</td>
+						<td><input class="itemName" id="" name="name" type="text"  value="" lay-verify="required|itemname"/></td>
+					</tr>
+					<tr><td>&nbsp;</td></tr>
+					</tbody>
+					
+					<tbody class="item-param-tbody">
+					
+					</tbody>
+					<tr>
+						<td></td>
+						<td>
+							<!--商品详细按钮-->
+							<div class="connect">
+								<button type="button" id="detail-layer" class="layui-btn layui-btn-radius">编辑商品详细</button>
+								<textarea id="editor-html" style="display:none"></textarea>
+							</div>
+						</td>
+					</tr>
+					<tbody>
+					<tr>
+						<td style="width: 100%; text-align: center;" colspan="2">
+							<button class="add layui-btn layui-btn-radius layui-btn-normal" lay-submit="" >确认修改</button>
+							<!-- <input type="reset" id="" value="" class="submit" /> -->
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			</form>
+		</div>
+		
+		
+		<script src="../js/jquery-3.2.0.min.js"></script>
+		<script src="../js/base.js"></script>
+		<script src="../js/commodity/editcommodity.js"></script>
+		<script>
+			//刷新当前页面
+			var refreshFlg = {sign:false,fun:function(){
+				history.go(0);
+			}};
+			
+			layui.use([ 'jquery', 'layer','form'],
+			function() {
+				var $ = layui.jquery;
+				var layer = layui.layer;
+				var form = layui.form();
+				$(".sku-table tbody").on('click','.edit-SKU',function(event){
+					var target = event.currentTarget;
+					var skuId = target.parentElement.parentElement.dataset.id;
+					var index = $(target.parentElement.parentElement).index();
+					layer.open({
+						type : 2,
+						title : '销售属性',
+						fixed : true,
+						shadeClose : true,
+						shade : 0.3,
+						area : [ '90%', '90%' ],
+						resize : false,
+						scrollbar : true,
+						content : 'editcommodity-sku.html?index='+index,
+						end : function(){
+							if(window.refreshFlg.sign){
+								window.refreshFlg.fun();
+							}
+						}
+					});
+				});
+				
+				//设置活动
+				$(".sku-table tbody").on('click','.onsale',function(event){
+					var target = event.currentTarget;
+					var skuId = target.parentElement.parentElement.dataset.id;
+					layer.open({
+						type : 2,
+						title : '设置活动',
+						fixed : true,
+						shadeClose : true,
+						shade : 0.3,
+						area : [ '80%', '80%' ],
+						resize : false,
+						scrollbar : true,
+						content : 'addonsalesku.html?skuID='+skuId,
+						end : function(){
+							if(window.refreshFlg.sign){
+								window.refreshFlg.fun();
+							}
+						}
+					});
+				});
+				
+				//结束活动
+				$(".sku-table tbody").on('click','.offsale',function(event){
+					var target = event.currentTarget;
+					var skuId = target.parentElement.parentElement.dataset.id;
+					layer.confirm('确认提前结束此次活动吗？', function(index){
+						$.post("/QiuLuPC-Manager/item/endOnSaleSku",{
+							skuId : skuId
+						},function(data){
+							if(data){
+								layer.close(index);//关闭后刷新页面????????????
+								window.refreshFlg.fun();	
+							}
+						});
+					});       
+				});
+
+				$('#detail-layer').on('click',function(event){
+					var textarea = $('#editor-html');
+					layer.open({
+						type:2,
+						title:'商品详细',
+						fixed:true,
+						shadeClose:true,
+						shade:0.3,
+						area : [ '90%', '90%' ],
+						resize:false,
+						scrollbar:true,
+						content : '/QiuLuPC-Manager/ueditor/index.html',
+						btn:['保存'],
+						success:function(layero,index){
+							var iframeWindow = window.frames[$('iframe',layero)[0].name];
+							iframeWindow.postMessage($(textarea).html(),"*");
+							console.log('读取detail')
+						},
+						yes:function(index,layero){
+							console.log('保存detail')
+							
+							$(textarea).html(window.frames[$('iframe',layero)[0].name].getContent());
+							layer.msg('保存！',
+							{time:1000}
+							);
+							layer.close(index);
+						}
+					});
+				});
+				
+				form.verify({
+				  itemname: function(value){
+				    if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)){
+				      return '商品名不能有特殊字符';
+				    }
+				    if(/(^\_)|(\__)|(\_+$)/.test(value)){
+				      return '商品名首尾不能出现下划线\'_\'';
+				    }
+				    if(/^\d+\d+\d$/.test(value)){
+				      return '商品名不能全为数字';
+				    }
+				  } 
+				  
+				  //我们既支持上述函数式的方式，也支持下述数组的形式
+				  //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
+				  ,pass: [
+				    /^[\S]{6,12}$/
+				    ,'密码必须6到12位，且不能出现空格'
+				  ] 
+				});  
+				form.on('submit', function(data){
+					itemFun.updateItem();
+				  	return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+				});
+				
+			});
+		</script>
+	</body>
+</html>

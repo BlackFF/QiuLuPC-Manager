@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>分类管理</title>
+<link rel="stylesheet" type="text/css" href="../css/main.css" />
+<link rel="stylesheet" type="text/css" href="../css/classify.css" />
+<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css" />
+<link rel="stylesheet" href="../css/layui.css" media="all" />
+	<script type="text/javascript" src="../easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="../easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../easyui/locale/easyui-lang-zh_CN.js"></script>
+	<link rel="stylesheet" type="text/css" href="../easyui/themes/default/easyui.css" />
+	<link rel="stylesheet" type="text/css" href="../easyui/themes/icon.css" />
+</head>
+<!-- <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js">
+</script>  -->
+<script type="text/javascript">
+	$(function() {
+		$("tbody").on("click",".operation",function(){
+			var dom = this.parentNode.parentNode;
+			selectFunction(this.innerText,dom.dataset.id);
+		});
+		function selectFunction(text,id){
+			if(text == "添加"){
+				location.href="/QiuLuPC-Manager/classify/addclassify.html?id="+id;
+			}
+			if(text == "删除"){
+				$.post("/QiuLuPC-Manager/category/checkCategory",{"categoryId":id},function(result){
+					if(result.status){
+						$.messager.confirm('确认框','您确定要删除吗！',function(flag){
+							if(flag){
+								$.post("/QiuLuPC-Manager/category/delete",{"id":id},function(result){
+									if(result.status){
+										$.messager.alert('消息框','删除成功！','info',function(){
+											location.href = "classify.html";
+										});
+										//alert("删除成功");
+										//location.href = "classify.html";
+									}
+								});
+							}
+						})
+					/* 	if(window.confirm("您确定要删除吗！")){
+							$.post("/QiuLuPC-Manager/category/delete",{"id":id},function(result){
+								if(result.status){
+									$.messager.alert('消息框','删除成功！','info');
+									//alert("删除成功");
+									location.href = "classify.html";
+								}
+							});
+						} */
+						
+					} else {
+						$.messager.alert('警告框',result.message+',无法修改!','warning');
+						//alert(result.message+",无法删除！");
+					}
+				});
+			}
+			if(text == "编辑"){
+				$.post("/QiuLuPC-Manager//category/checkCategory",{"categoryId":id},function(result){
+					if(result.status){
+						location.href="/QiuLuPC-Manager/classify/editclassify.html?id="+id;
+					} else {
+						$.messager.alert('警告框',result.message+',无法修改!','warning');
+						//alert(result.message+",无法修改！");
+					}
+				});
+			}
+		}
+	});
+</script>
+<body>
+	<div class="location noselect">
+		管理中心-分类管理 <a class="location-btn" href="addclassify.html">添加顶级分类</a>
+	</div>
+	<div class="main">
+		<table cellspacing="0" class="table">
+			<tr class="thader">
+				<th>分类名称</th>
+				<th>操作</th>
+			</tr>
+			<tbody class="tbody">
+
+
+			</tbody>
+		</table>
+	</div>
+	<!-- <script src="../js/jquery-3.2.0.min.js"></script> -->
+	<script src="../js/classify/classify.js"></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/QiuLu/!svn/ver/559/QiuLuPC-Manager/src/com/howin/qiulu/dao/impl
+END
+ExpressDaoImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/QiuLu/!svn/ver/559/QiuLuPC-Manager/src/com/howin/qiulu/dao/impl/ExpressDaoImpl.java
+END
+OrderDaoImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/QiuLu/!svn/ver/559/QiuLuPC-Manager/src/com/howin/qiulu/dao/impl/OrderDaoImpl.java
+END
+RepertoryDaoImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/QiuLu/!svn/ver/468/QiuLuPC-Manager/src/com/howin/qiulu/dao/impl/RepertoryDaoImpl.java
+END
+CategoryDaoImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/QiuLu/!svn/ver/515/QiuLuPC-Manager/src/com/howin/qiulu/dao/impl/CategoryDaoImpl.java
+END
+ItemDaoImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/QiuLu/!svn/ver/537/QiuLuPC-Manager/src/com/howin/qiulu/dao/impl/ItemDaoImpl.java
+END
+UserDaoImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/QiuLu/!svn/ver/92/QiuLuPC-Manager/src/com/howin/qiulu/dao/impl/UserDaoImpl.java
+END
+SkuDaoImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/QiuLu/!svn/ver/537/QiuLuPC-Manager/src/com/howin/qiulu/dao/impl/SkuDaoImpl.java
+END
+EvaluationDaoImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/QiuLu/!svn/ver/172/QiuLuPC-Manager/src/com/howin/qiulu/dao/impl/EvaluationDaoImpl.java
+END
+AdminDaoImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/QiuLu/!svn/ver/92/QiuLuPC-Manager/src/com/howin/qiulu/dao/impl/AdminDaoImpl.java
+END

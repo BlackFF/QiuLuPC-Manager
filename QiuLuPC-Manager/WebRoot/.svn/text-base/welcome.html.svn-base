@@ -1,0 +1,26 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE></TITLE>
+<style type="text/css">
+<!--
+.STYLE1 {
+	color: #FF0000;
+	font-size: large;
+}
+-->
+</style>
+</HEAD>
+<BODY leftMargin=0 topMargin=0>
+	<table width="700px" border="0" align="center">
+	</table>
+	<DIV id=img
+		style="Z-INDEX: 10; WIDTH: 200px; POSITION: absolute; HEIGHT: 300px">
+		<A href="#" target=_blank><IMG height=200 alt="" src="images/sss.gif"
+			width=400 border=0> </A>
+	</DIV>
+	<script type="text/javascript" src="js/img.js">
+	</script>
+</BODY>
+</HTML>
+

@@ -1,0 +1,149 @@
+.display-hide{
+	display:none;
+}
+.location-btn{
+	margin-left: 10px;
+	background: #F8F8F8;
+	border: 2px solid #ccc;
+	padding: 2px 5px;
+	color: #555;
+	border-radius: 5px;
+	cursor: default;
+}
+.location-btn:active{
+	background: #f0f0f0;
+}
+.main{
+	padding: 1%;
+	width: 96%;
+	background: #fff;
+}
+.table{
+	width: 40%;
+	border: 2px solid #ccc;
+	border-collapse: collapse;
+}
+.thader{
+	background: #ddd;
+}
+.thader th{
+	border: 2px solid #ccc;
+	padding: 5px 10px;
+}
+.tbody tr td{
+	border: 2px solid #ccc;
+	/*text-align: center;*/
+	padding: 5px 10px;
+}
+.tbody tr:nth-child(2n){
+	background: #f4f4f4;
+}
+.operation{
+	display: inline-block;
+	font-size: 14px;
+	color: #555;
+	margin-left: 10px;
+}
+.operation:hover{
+	color: #999;
+}
+.class1,.class2,.class3{
+	text-align: left !important;
+}
+.class1{
+	padding-left: 10px !important;
+	font-size: 18px;
+}
+.class2{
+	padding-left: 30px !important;
+	font-size: 16px;
+	color: #666;
+}
+.class3{
+	padding-left:50px !important;
+	font-size: 14px;
+	color: #999;
+}
+
+/*添加分类*/
+.contable{
+	border: none;
+	width: 100%;
+}
+.show{
+	width: 100%;
+	background: #FF9875;
+	padding: 8px 0;
+	color: #fff;
+	text-align: center;
+}
+.connect{
+	background: #fff;
+	margin: 0 auto;
+	margin-top: 10px;
+	width: 96%;
+	padding: 1%;
+}
+.contable td{
+	padding-top:10px;
+}
+.contable textarea{
+	width: 300px;
+	line-height:30px;
+	height: 30px; 
+	resize: none; 
+	border: none; 
+	background: #eee;
+}
+
+.add{
+	width:500px;
+}
+.tdleft{
+	width:100px;
+	text-align: right; 
+	padding-right: 10px;
+}
+td.tdleft:after {
+    content: ":";
+}
+.text{
+	background: #eee;
+	height: 30px;
+	border: none;
+}
+.text1{
+	background: #eee;
+	height: 30px;
+	border: none;
+}
+.text2{
+	background: #eee;
+	height: 30px;
+	border: none;
+}
+.operation{
+	border-radius: 5px;
+	padding: 0 10px;
+	margin-left: 5px;
+	border: 2px solid #ddd;
+	cursor: default;
+	-webkit-user-select: none;
+}
+.add p{
+	margin-bottom: 10px;
+}
+
+.layui-tree-branch-close:before{
+	content: "\e622";
+}
+.layui-tree-branch-open:before{
+	content: "\e624";
+}
+.layui-tree-leaf:before{
+	content: "\e621";
+}
+.select-Category{
+	width:500px;
+}
+

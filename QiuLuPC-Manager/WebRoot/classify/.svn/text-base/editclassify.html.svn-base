@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" type="text/css" href="../css/main.css" />
+<link rel="stylesheet" type="text/css" href="../css/classify.css" />
+<link rel="stylesheet" href="../css/layui.css" media="all" />
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript" src="../js/base.js"></script>
+<script src="../layui/layui.js"></script>
+
+</head>
+<body>
+	<div class="show">添加分类</div>
+	<div class="connect">
+		<form action="" method="post" class="addclass layui-form">
+			<table cellspacing="0" class="contable">
+				<tr>
+					<td class="tdleft">分类名称</td>
+					<td><textarea name="" rows="" cols="" lay-verify="required|noSpecial"></textarea></td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+				</tr>
+				<tbody class="item-param-tbody">
+					<!-- <tr class="item-param-group">
+						<td class="tdleft" style="float: right;">属性分组名</td>
+						<td><input type="text" class="text1"  name="" value=""/><span class="operation">-</span></td>
+					</tr>
+					<tr class="item">
+						<td class="tdleft" style="float: right;"></td>
+						<td class="add" id="item_p">
+							<p>
+								<input type="text" name="" class="first_item text1" value="" /><span
+									class="operation">+</span>
+							</p>
+							<p><input type="text" name="" value="" class="text1" /><span class="operation">+</span><span class="operation">-</span></p>
+						</td>
+					</tr>
+					<tr class="item">
+						<td class="tdleft" style="float: right;">属性分组名</td>
+						<td><input type="text" class="text1"  name="" value=""/><span class="operation">-</span></td>
+					</tr>
+					<tr class="item">
+						<td class="tdleft" style="float: right;"></td>
+						<td class="add" id="item_p">
+							<p>
+								<input type="text" name="" class="first_item text1" value="" /><span
+									class="operation">+</span>
+							</p>
+							<p><input type="text" class="text1" name="" value=""  /><span class="operation">+</span><span class="operation">-</span></p>
+						</td>
+					</tr> -->
+				</tbody>
+				<tr class=""><td><span class="operation" id="addItemGroup">+</span>添加属性分组</td></tr>
+
+				<tr>
+					<td>&nbsp;</td>
+				</tr>
+				<tr id="sku">
+					<td class="tdleft" style="float: right;">SKU属性</td>
+					<td class="add" id="sku_p">
+						<p>
+							<input type="text" name="" id="first_sku" value="" class="text2" lay-verify="required|noSpecial" /><span
+								class="operation">+</span>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="width: 100%; text-align: center;" colspan="2">
+						<button type="submit" class="add layui-btn layui-btn-radius layui-btn-normal" lay-submit >确认修改</button>
+						<button type="button" class="add layui-btn layui-btn-radius layui-btn-warm" onclick="history.go(0)" >重置</button>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<script type="text/javascript">
+	var editFun = (function(){
+		var id = request("id");
+		$.post("/QiuLuPC-Manager/category/getById",{"id":id},function(result){
+			var category = result.object;
+			$("textarea")[0].innerHTML = category.name;
+			var itemParamData =JSON.parse(category.itemParamData);//.param
+			var temp_html = [];
+			for(var i=0;i<itemParamData.length;i++){
+//				if(i == 0){
+//					$("#first_item")[0].value = itemParamData[i];
+//				} else {
+//					var item_p = '<p><input type="text" name="" id="" value="'+itemParamData[i]+'" class="text1" /><span class="operation">+</span><span class="operation">-</span></p>';
+//					$("#item_p").append(item_p);
+//				}
+				//显示分类的商品属性
+				temp_html.push('<tr class="item-param-group"><td class="tdleft" style="float: right;">属性分组名</td>\
+						<td><input type="text" class="text1"  name="" value="'+itemParamData[i].group+'" lay-verify="required|noSpecial"/>\
+							<span class="operation delItemGroup">-</span></td>\
+						</tr>')  
+				temp_html.push('<tr class="item"><td class="tdleft" style="float: right;"></td><td class="add" id="item_p">');
+				itemParamData[i].param.forEach(function(ele,index,array){
+					if(index === 0){
+						temp_html.push('<p><input type="text" name="" value="'+ele+'" class="text1" lay-verify="required|noSpecial"/>\
+											<span class="operation">+</span></p>');
+					}else{
+						temp_html.push('<p><input type="text" name="" value="'+ele+'" class="text1" lay-verify="required|noSpecial"/>\
+											<span class="operation">+</span><span class="operation">-</span></p>');
+					}
+				});
+				temp_html.push('</td></tr>');	
+			}
+			$('.item-param-tbody').append(temp_html.join(''));
+			
+			var skuParamData = JSON.parse(category.skuParamData);
+			for(var i=0;i<skuParamData.param.length;i++){
+				if(i == 0){
+					$("#first_sku")[0].value = skuParamData.param[i];
+				} else {
+					var sku_p = '<p><input type="text" name="" id="" value="'+skuParamData.param[i]+'" class="text2" lay-verify="required|noSpecial"/>\
+									<span class="operation">+</span><span class="operation">-</span></p>';
+					$("#sku_p").append(sku_p);
+				}
+			}
+		});
+		$(".item-param-tbody").on("click",".item .operation",function(){
+			var text = this.innerText;
+			if(text == "+"){
+				var p = '<p><input type="text" name="" id="" value="" class="text1" lay-verify="required|noSpecial"/>\
+							<span class="operation">+</span><span class="operation">-</span></p>';
+				var dom = $(this.parentNode);
+				dom.after(p);
+			}
+			if(text == "-"){
+				$(this.parentNode).remove();
+			}
+		});
+		$("#sku").on("click",".operation",function(){
+			var text = this.innerText;
+			if(text == "+"){
+				var p = '<p><input type="text" name="" id="" value="" class="text2" lay-verify="required|noSpecial"/>\
+							<span class="operation">+</span><span class="operation">-</span></p>';
+				var dom = $(this.parentNode);
+				dom.after(p);
+			}
+			if(text == "-"){
+				$(this.parentNode).remove();
+			}
+		});
+
+		//添加新分组
+		$('#addItemGroup').click(function(){
+		
+			$('.item-param-tbody').append('<tr class="item-param-group">\
+				<td class="tdleft" style="float: right;">属性分组名</td>\
+				<td><input type="text" class="text1"  name="" value="" lay-verify="required|noSpecial"/><span class="operation delItemGroup">-</span></td>\
+			</tr>\
+			<tr class="item">\
+				<td class="tdleft" style="float: right;"></td>\
+				<td class="add" id="item_p">\
+					<p><input type="text" name="" value="" class="text1" lay-verify="required|noSpecial"/><span class="operation">+</span></p>\
+				</td>\
+			</tr>');
+		});
+
+		//删除所选分组
+		$('.item-param-tbody').on('click','.delItemGroup',function(){
+			var $tr = $(this).parent().parent();
+			$tr.next().remove();
+			$tr.remove();
+		});
+		function submitFun(){
+			var name = $("textarea").val();
+			var itemParamData = getItemText();
+			var skuParam = getText($("input").filter(".text2"));
+			var skuParamObj = {};
+			skuParamObj.param= skuParam;
+			var skuParamData = JSON.stringify(skuParamObj);
+			$.post("/QiuLuPC-Manager/category/change",{"id":id,"name":name,"skuParamData":skuParamData,"itemParamData":itemParamData},function(result){
+				if(result.status){
+					alert("修改成功！");
+					location.href = "classify.html";
+				} else {
+					alert("修改失败！");
+				}
+			});
+		};
+		function getText(data){
+			var paramData = new Array();
+			for(var i=0;data.length>i;i++){
+				paramData[i]=data[i].value;
+			}
+			return paramData;
+		}
+
+		function getItemText(){//.item-param-group
+			var param = [];
+			var itemParamNames = document.getElementsByClassName('item-param-group');
+			var items = document.getElementsByClassName('item')
+			for(var index = 0,len = itemParamNames.length;index < len; index ++){
+				param[index] = {};
+				param[index].group = itemParamNames[index].querySelector("input").value;
+				param[index].param = [];
+				var $i = $('input',items[index])
+				$i.each(function(){
+					param[index].param.push(this.value);
+				});
+			};
+			return JSON.stringify(param);
+		}
+
+		return {submitFun:submitFun};
+	}())
+</script>
+	<script>
+		layui.use(['jquery','layer','form'],function(){
+			var $ = layui.jquery;
+			var layer = layui.layer;
+			var form = layui.form();
+			form.verify({
+			  itemname: function(value){
+			    if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)){
+			      return '商品名不能有特殊字符';
+			    }
+			    if(/(^\_)|(\__)|(\_+$)/.test(value)){
+			      return '商品名首尾不能出现下划线\'_\'';
+			    }
+			    if(/^\d+\d+\d$/.test(value)){
+			      return '商品名不能全为数字';
+			    }
+			  } 
+			  //我们既支持上述函数式的方式，也支持下述数组的形式
+			  //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
+			  ,pass: [
+			    /^[\S]{6,12}$/
+			    ,'密码必须6到12位，且不能出现空格'
+			  ]
+			  ,price:[
+			  	/^(([1-9]\d*)|((0?|[1-9]\d*)(\.[0-9]{1,2})?))$/
+			  	,'价格为整数或两位小数，单位  元'
+			  ]
+			  ,noSpecial:[
+			  	/^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$/
+			  	,'不能有特殊字符'
+			  ]
+			});  
+			form.on('submit',function(){
+				editFun.submitFun();
+		  		return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+			});
+		});
+	</script>
+</body>
+</html>

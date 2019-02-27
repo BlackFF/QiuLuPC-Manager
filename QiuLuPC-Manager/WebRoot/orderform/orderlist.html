@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>订单列表</title>
+<link rel="stylesheet" type="text/css" href="../css/main.css" />
+<link rel="stylesheet" href="../css/layui.css" media="all" />
+<link rel="stylesheet" href="../css/global.css" media="all">
+<link rel="stylesheet" href="../css/layui.css" media="all" />
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="../layui/layui.js"></script>
+</head>
+
+<body>
+
+	<div class="location">管理中心-订单列表</div>
+	<div class="main">
+		<div class="serchs">
+			<input type="text" name="" id="order_id" value="" placeholder="订单号"
+				class="serch" /> 
+			<input type="text" name="" id="order_phone" value="" placeholder="手机号" 
+				class="serch" /> 
+			<select name=""	class="select" id="status">
+				<option value="1">未处理</option>
+				<option value="2">已发货</option>
+				<option value="3">已完成</option>
+				<option value="4">已取消</option>
+				<option value="5">退货</option>
+			</select> <input type="submit" value="搜索" class="submit" id="search" />
+		</div>
+		<div class="commodity-list">
+			<div class="layui-field-box">
+				<table class="site-table table-hover">
+					<thead>
+						<tr>
+							<th>订单号</th>
+							<th>收货人</th>
+							<th>下单时间</th>
+							<th>总金额</th>
+							<th>联系电话</th>
+							<th>订单状态</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><input type="checkbox">444</td>
+							<td>小盆植物</td>
+							<td>20.00</td>
+							<td>3.5</td>
+							<td>200</td>
+							<td>300</td>
+							<td>无</td>
+							<td><a href="menu.html">查看</a></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox">445</td>
+							<td>小盆植物</td>
+							<td>20.00</td>
+							<td>3.5</td>
+							<td>200</td>
+							<td>300</td>
+							<td>无</td>
+							<td><a href="menu.html">查看</a></td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="btn_changepage">
+					<a id="totle"></a> <input type="button" name="" id="first"
+						value="首页" class="btn" /> <input type="button" name="" id="pre"
+						value="上一页" class="btn" /> <input type="button" name="" id="next"
+						value="下一页" class="btn" /> <input type="button" name="" id="last"
+						value="尾页" class="btn" /> <input type="text" name="" id="page"
+						value="" style="width: 40px;" /> <input type="button" name=""
+						id="skip" value="跳转" class="btn" />
+				</div>
+				<div class="layui-clear"></div>
+			</div>
+		</div>
+	</div>
+<script type="text/javascript">
+var orderFun = (function(){
+		var status = 1;
+		var totel;
+		var curpage;
+		var phone;
+		var statusName;
+		function pageFunction(result){
+			var orderView = "";
+			var orders = result.object.list;
+			for(var i=0;i<orders.length;i++){
+				orderView = orderView+"<tr><td>"+orders[i].id+"</td>"
+				+ "<td>" + orders[i].receiver + "</td>"
+				+ "<td>" + getLocalTime(orders[i].createTime) + "</td>"
+				+ "<td>" + orders[i].total + "元</td>"
+				+ "<td>" + orders[i].phone + "</td>"
+				+ "<td>" + getStatusName(orders[i].status) + "</td>"
+				+ '<td><a href="javaScript:void(0)" class="showMenu" data-href="menu.html?id='+orders[i].id+'" >查看</a></td></tr>';
+			}
+			if(!result.object.hasPrePage){
+				$("#pre")[0].disabled=true;
+			} else {
+				$("#pre")[0].disabled=false;
+			}
+			if(!result.object.hasNextPage){
+				$("#next")[0].disabled=true;
+			} else {
+				$("#next")[0].disabled=false;
+			}
+			totel = result.object.totalPage;
+			curpage = result.object.beginPage;
+			$("tbody").empty();
+			$("tbody").append(orderView);
+			$("#totle")[0].innerHTML="共"+result.object.totalPage+"页,当前"+result.object.beginPage+"页";
+		}
+		var showPageFunction = {
+		};
+		var orderPage = {
+			getOrder:function(pageNumber){
+				$("tbody").empty();
+				$.post("/QiuLuPC-Manager/order/list",{"pageNumber":pageNumber,"status":status},function(result){
+					if(result.status){
+						pageFunction(result);
+						showPageFunction.getOrder = function(pageNumber){
+							orderPage.getOrder(pageNumber);
+						}
+					}
+				});	
+			},
+			getOrderById:function(id){
+				$("tbody").empty();
+				$.post("/QiuLuPC-Manager/order/get",{"id":id},function(result){
+					if(result.status){
+						var order = result.object.order;
+						orderView = "<tr><td>"+order.id+"</td>"
+						+ "<td>" + order.receiver + "</td>"
+						+ "<td>" + getLocalTime(order.createTime) + "</td>"
+						+ "<td>" + order.total + "元</td>"
+						+ "<td>" + order.phone + "</td>"
+						+ "<td>" + getStatusName(order.status) + "</td>"
+						+ '<td><a href="javaScript:void(0)" class="shoMenu" data-href="menu.html?id='+order.id+'" >查看</a></td></tr>';
+						$("tbody").append(orderView);
+					}
+				});	
+			},
+			getOrderByPhone:function(pageNumber){
+				$("tbody").empty();
+				$.post("/QiuLuPC-Manager/order/phone",{"pageNumber":pageNumber,"phone":phone},function(result){
+					if(result.status){
+						pageFunction(result);
+						showPageFunction.getOrder = function(pageNumber){
+							orderPage.getOrderByPhone(pageNumber);
+						}
+					}
+				});
+			}
+		}
+		orderPage.getOrder(1);
+		$("#first").click(function(){
+			showPageFunction.getOrder(1);
+		});
+		$("#last").click(function(){
+			showPageFunction.getOrder(totel);
+		});
+		$("#pre").click(function(){
+			showPageFunction.getOrder(curpage-1);
+		});
+		$("#next").click(function(){
+			showPageFunction.getOrder(curpage+1);
+		});
+		$("#skip").click(function(){
+			var pageNumber = $("#page").val();
+			if(isPositiveNum(pageNumber) && pageNumber　>= 1 &&　pageNumber <= totel){
+				showPageFunction.getOrder(pageNumber);
+			} else {
+				alert("输入不合法！");
+			}
+		});
+		$("#order_id").blur(function(){
+			var id = $("#order_id").val();
+			if(id === ""){
+				return ;
+			}
+			if(!(/^[0-9]{11}$/.test(id))){
+				layui.use(['layer'],function(){
+					var layer = layui.layer;
+					layer.msg('请输入11位数字订单号',{time:1500});
+				});
+				return;
+			}
+			orderPage.getOrderById(id);
+		});
+		$("#order_phone").blur(function(){
+			phone = $("#order_phone").val();
+			if(phone === ""){
+				return ;
+			}
+			if(!(/^1[3|4|5|7|8][0-9]{9}$/.test(phone))){
+				layui.use(['layer'],function(){
+					var layer = layui.layer;
+					layer.msg('手机号格式不正确',{time:1500});
+				});
+				return;
+			}
+			orderPage.getOrderByPhone(1);
+		});
+		$("#search").click(function(){
+			status = $("#status").val();
+			orderPage.getOrder(1);
+		})
+		function isPositiveNum(s){//是否为正整数  
+		    var re = /^[0-9]*[1-9][0-9]*$/ ;  
+		    return re.test(s)  
+		};
+		function getLocalTime(nS) { 
+			return new Date(nS).toLocaleString().substr(0,17);
+		};
+		function getStatusName(status){
+			if(status == 0){
+				return "未支付";
+			}
+			if(status == 1){
+				return "未处理";
+			}
+			if(status == 2){
+				return "送货中";
+			}
+			if(status == 3){
+				return "订单完成";
+			}
+			if(status == 4){
+				return "订单取消";
+			}
+			if(status == 5){
+				return "退货";
+			}
+		};
+		
+		return {search:search};
+	}());
+</script>
+	<script>
+		layui.use(['jquery','layer','form']
+		,function (){
+			var $ = layui.jquery;
+			var layer = layui.layer;
+			var form = layui.form();
+			
+			$("tbody").on('click','.showMenu',function(event){
+				var h = event.currentTarget.dataset.href;
+				layer.open({
+						type:2,
+						title:'订单详细',
+						fixed:true,
+						shadeClose:true,
+						shade:0.3,
+						area : [ '90%', '90%' ],
+						resize:false,
+						scrollbar:true,
+						content : h
+					});
+			});
+			
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>管理员</title>
+<link rel="stylesheet" type="text/css" href="../css/layui.css" />
+<link rel="stylesheet" type="text/css" href="../css/menu.css" />
+<link rel="stylesheet" type="text/css" href="../css/global.css" />
+<link rel="stylesheet" type="text/css" href="../date/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="../css/main.css" />
+</head>
+<script type="text/javascript" src="../js/base.js"></script>
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		var id = request("id");
+		var admin;
+		$.post("/QiuLuPC-Manager/admin/getAdmin",{},function(result){
+			admin = result.object;
+			$("#name")[0].innerHTML = admin.name;
+			$("#phone")[0].innerHTML = admin.telephone;
+			
+		});
+		$("#change").click(function(){
+			$("#changePassword").css("display","block");
+			$("#changeName")[0].value = admin.name;
+			$("#changePhone")[0].value = admin.telephone;
+			
+		});
+		$("#cancel").click(function(){
+			$("#changePassword").css("display","none");
+		});
+		$("#sub").click(function(){
+			var name = $("#changeName").val();
+			var telephone = $("#changePhone").val();
+			if(name == "" || telephone == ""){
+				alert("内容不能为空！");
+			} else {
+				$.post("/QiuLuPC-Manager/admin/saveAdmin",{"id":id,"name":name,"telephone":telephone},function(result){
+					if(result.status){
+						alert("修改成功!");
+						location.href = "manager.html?id="+id;
+					}
+				})
+			}
+		});
+	});
+</script>
+<body>
+	<div class="location">管理员-管理员信息</div>
+	<div class="commodity-list">
+		<div class="layui-field-box">
+			<table class="table" cellspacing="0">
+				<thead>
+					<tr>
+						<p class="table-top">管理员信息</p>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>名字：</td>
+						<td id="name">张三</td>
+						<td>电话：</td>
+						<td id="phone">131333333333</td>
+					</tr>
+					<tr>
+						<td>修改信息：</td>
+						<td colspan="3"><a id="change">去修改</a></td>
+					</tr>
+					<!--<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>-->
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="delivery-main" style="display: none" id="changePassword">
+		<div class="form-group">
+			<div class="col-xs-12">
+				名字 <input type="text" class="form-control" id="changeName"/>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-xs-12">
+				电话<input type="text" class="form-control" id="changePhone"/>
+			</div>
+		</div>
+		<div class="col-xs-6">
+			<button class="btn-info btn btn-block" id="sub">提交</button>
+		</div>
+		<div class="col-xs-6">
+			<button class="btn-warning btn btn-block" id="cancel">取消</button>
+		</div>
+	</div>
+</body>
+</html>

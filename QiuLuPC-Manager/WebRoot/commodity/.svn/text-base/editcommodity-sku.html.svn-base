@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>sku/相册 商品属性编辑</title>
+		<link rel="stylesheet" type="text/css" href="../css/main.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/classify.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/commodity photos.css"/>
+		<link href="http://www.jq22.com/jquery/bootstrap-3.3.4.css" rel="stylesheet">
+        <link href="../css/fileinput.css" media="all" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="../css/layui.css" media="all" />
+        
+      	<script src="../js/jquery-3.2.0.min.js"></script>
+        <script src="../js/fileinput.min.js" type="text/javascript"></script>
+        <script src="http://www.jq22.com/jquery/bootstrap-3.3.4.js" type="text/javascript"></script>
+        <script src="../layui/layui.js"></script>
+	</head>
+	<body>
+		<div class="show">
+			商品编辑
+		</div>
+		<div class="connect layui-form">
+			<table cellspacing="0" class="contable" >
+				<!--<tr>
+					<td class="tdleft">商品名称：</td>
+					<td><input type="text" name="" id="" value="" class="text"/></td>
+				</tr>
+				<tr>
+					<td class="tdleft">数量单位：</td>
+					<td>
+						<input type="text" name="" id="" value="" class="text"/>
+					</td>
+					
+				</tr>-->
+				<tr><td>&nbsp;</td></tr>
+				<tr>
+					<td class="tdleft" style="float: right;">商品价格</td>
+					<td class="add sku-Price">
+						<p><input type="num" name="" id="" value="" class="text" lay-verify="required|price" />
+					</td>
+				</tr>
+				<tr>
+					<td class="tdleft " style="float: right;">商品卖点</td>
+					<td class="add sku-sellPoint">
+						<p>
+							<textarea name="" rows="" cols="" lay-verify="required"
+								 style="width: 300px; height:60px; resize: none; border: none; background: #eee;"></textarea>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<td class="tdleft" style="float: right;">商品发货地</td>
+					<td class="add sku-deliveryPlace">
+						<p><input type="text" name="" id="" value="" class="text" lay-verify="required|noSpecial"/>
+					</td>
+				</tr>
+				<tr><td>&nbsp;</td></tr>
+				<!--<tr>
+					<td class="tdleft" style="float: right;">商品价格：</td>
+					<td class="add">
+						<p><input type="text" name="" id="" value="" class="text"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="tdleft" style="float: right;">商品产地：</td>
+					<td class="add">
+						<p><input type="text" name="" id="" value="" class="text"/>
+					</td>
+				</tr>-->
+				
+				<!--<tr>
+					<td style="width: 100%;" colspan="2">
+						<input type="submit" value="确认添加" class="submit"/>
+						<input type="reset" id="" value="重置" class="submit" />
+					</td>
+				</tr>-->
+			</table>
+			<table border="0" cellspacing="0" cellpadding="" class="tab-content">
+				<tr>
+					<td style="padding-top: 20px;" colspan="2">
+						<button type="submit" class="add layui-btn layui-btn-radius layui-btn-normal" lay-submit >确认修改</button>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="connect">
+			<div class="photo">
+				<!--<ul>
+					<li><a href="###">&nbsp;</a><img src="../assets/img/backgrounds/2.jpg"/><input type="text" name="" id="" value="" /></li>
+					<li><a href="###">&nbsp;</a><img src="../assets/img/backgrounds/2.jpg"/><input type="text" name="" id="" value="" /></li>
+					<li><a href="###">&nbsp;</a><img src="../assets/img/backgrounds/2.jpg"/><input type="text" name="" id="" value="" /></li>
+					<li><a href="###">&nbsp;</a><img src="../assets/img/backgrounds/2.jpg"/><input type="text" name="" id="" value="" /></li>
+					<div class="clear"></div>
+				</ul>-->
+				<input id="image" type="file" name="image" multiple class="image"  data-min-file-count="1" >
+			</div>
+			
+		</div>
+		
+		<script src="../js/base.js"></script>
+		<script src="../js/commodity/editcommodity-sku.js"></script>
+		<script>
+			 layui.use([ 'jquery', 'layer','form'],
+				function(){
+					var $ = layui.jquery;
+					var layer = layui.layer;
+					var form = layui.form();
+					form.verify({
+					  itemname: function(value){
+					    if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)){
+					      return '商品名不能有特殊字符';
+					    }
+					    if(/(^\_)|(\__)|(\_+$)/.test(value)){
+					      return '商品名首尾不能出现下划线\'_\'';
+					    }
+					    if(/^\d+\d+\d$/.test(value)){
+					      return '商品名不能全为数字';
+					    }
+					  } 
+					  
+					  //我们既支持上述函数式的方式，也支持下述数组的形式
+					  //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
+					  ,pass: [
+					    /^[\S]{6,12}$/
+					    ,'密码必须6到12位，且不能出现空格'
+					  ]
+					  ,price:[
+					  	/^(([1-9]\d*)|((0?|[1-9]\d*)(\.[0-9]{1,2})?))$/
+					  	,'价格为整数或两位小数，单位  元'
+					  ]
+					  ,noSpecial:[
+					  	/^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$/
+					  	,'不能有特殊字符'
+					  ]
+					
+					});  
+					form.on('submit',function(){
+						skuFun.updataSKU();
+				  		return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+					});
+				});
+		</script>
+		<script>
+		 $("#image").fileinput({
+			 	uploadUrl: '/QiuLuPC-Manager/sku/upload?', // you must set a valid URL here else you will get an error
+			 	uploadExtraData : {id:parent.itemFun.getSkus()[request('index')].id},
+		        showUploadedThumbs : false,
+		        showClose : false,
+			 	allowedFileExtensions : ['jpg', 'png','gif'],
+		 		overwriteInitial: false,
+		        maxFileSize: 1000,
+		        maxFileCount : 3,
+		        fileActionSettings : {showUpload : false},
+		        // setup initial preview with data keys
+				initialPreview: (function(){
+					var image = JSON.parse(parent.itemFun.getSkus()[request('index')].image);
+					if(image){
+						return image.map(function(curr,index,arr){
+							return 'http://localhost:8081/QiuLu/images/' + curr;
+						})
+					}
+					return [];
+				}()),
+				 initialPreviewAsData: true,
+				// initial preview configuration
+				initialPreviewConfig: 
+					(function(){
+					 	var sku = parent.itemFun.getSkus()[request('index')];
+					 	var image = JSON.parse(sku.image);
+					 	var config = [];
+					 	if(image){
+					 		image.forEach(function(ele){
+						 		config.push({ width: '120px',
+						        url: '/QiuLuPC-Manager/sku/delete',
+						        extra: {id: sku.id,imageName:ele}});
+						 	});
+						}
+					 	return config;
+					}())
+			});
+		 
+		$('#image').on('fileuploaded', function(event, data, previewId, index) {
+			 var curr = event.currentTarget;
+		 	setTimeout(function(){
+		 		$(curr).fileinput('disable');
+		 	},500);
+			console.log('File batch pre upload');
+			parent.refreshFlg.sign = true;
+		});
+		
+		$('#image').on('filedeleted', function(event, key) {
+		    parent.refreshFlg.sign = true;
+		});
+		
+		</script>
+	</body>
+</html>

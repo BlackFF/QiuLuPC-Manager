@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>商品列表</title>
+<link rel="stylesheet" type="text/css" href="../css/main.css" />
+<link rel="stylesheet" href="../css/layui.css" media="all" />
+<link rel="stylesheet" href="../css/global.css" media="all">
+</head>
+<script type="text/javascript" src="../easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="../easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../easyui/locale/easyui-lang-zh_CN.js"></script>
+	<link rel="stylesheet" type="text/css" href="../easyui/themes/default/easyui.css" />
+	<link rel="stylesheet" type="text/css" href="../easyui/themes/icon.css" />
+<!-- <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js">
+</script> -->
+<script type="text/javascript">
+	$(function(){
+		var totel;
+		var curpage;
+		var name;
+		function pageFunction(result){
+			var items = result.object.list;
+			var itemView = "";
+			for(var i=0;i<items.length;i++){
+				var img = "";
+				var status = "";
+				if(items[i].status == 0){
+					img = "<img src='../images/yes.gif' />";
+					status = "下架";
+				} else {
+					img = "<img src='../images/no.gif' />"
+					status = "上架";
+				}
+				itemView = itemView + "<tr><th>"+items[i].id+"</th>" 
+				+ "<th>"+items[i].sellPoint+"</th>"
+				+ "<th>"+items[i].price+"</th>"
+				+ "<th>"+items[i].discount+"</th>"
+				+ "<th id="+items[i].id+">"+img+"</th>"
+				+ "<th>"+items[i].salesVolume+"</th>"
+				+ "<th>"+items[i].repertory+"</th>"
+				+ "<th>"+items[i].deliveryPlace+"</th>"
+				+ "<th>"+'<a class="layui-btn layui-btn-normal layui-btn-mini" data-value="'+items[i].itemId+'">查看</a>'
+				+'<a data-id="1" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini" data-value="'+items[i].id+'" id="'+items[i].id+'s'+'">'+status+'</a>'
+				+"</th></tr>";
+			}
+			if(!result.object.hasPrePage){
+				$("#pre")[0].disabled=true;
+			} else {
+				$("#pre")[0].disabled=false;
+			}
+			if(!result.object.hasNextPage){
+				$("#next")[0].disabled=true;
+			} else {
+				$("#next")[0].disabled=false;
+			}
+			totel = result.object.totalPage;
+			curpage = result.object.beginPage;
+			$("tbody").empty();
+			$("tbody").append(itemView);
+			$("#totle")[0].innerHTML="共"+result.object.totalPage+"页,当前"+result.object.beginPage+"页";
+		};
+		var showPageFunction = {
+				
+		};
+		var itemPage = {
+				getItems:function(pageNumber){
+					$("tbody").empty();
+					$.post("/QiuLuPC-Manager/sku/getAll?pageNumber="+pageNumber,{},function(result){
+						if(result.status){
+							pageFunction(result);
+							showPageFunction.getItems = function(pageNumber){
+								itemPage.getItems(pageNumber);
+							}
+						}
+					});
+				},
+				getItemsByStatus:function(pageNumber,status){
+					$("tbody").empty();
+					$.post("/QiuLuPC-Manager/sku/status?pageNumber="+pageNumber+"&status="+status,{},function(result){
+						if(result.status){
+							pageFunction(result);
+							showPageFunction.getItems = function(pageNumber){
+								itemPage.getItemsByStatus(pageNumber,status);
+							}
+						}
+					});
+				},
+				getItemsByName:function(pageNumber){
+					$("tbody").empty();
+					$.post("/QiuLuPC-Manager/sku/search",{'pageNumber':pageNumber,'name':name},function(result){
+						if(result.status){
+							pageFunction(result);
+							showPageFunction.getItems = function(pageNumber){
+								itemPage.getItemsByName(pageNumber);
+							}
+						}
+					});
+				}
+		};
+		itemPage.getItems(1);
+		$("#first").click(function(){
+			showPageFunction.getItems(1);
+		});
+		$("#last").click(function(){
+			showPageFunction.getItems(totel);
+		});
+		$("#pre").click(function(){
+			showPageFunction.getItems(curpage-1);
+		});
+		$("#next").click(function(){
+			showPageFunction.getItems(curpage+1);
+		});
+		$("#skip").click(function(){
+			var pageNumber = $("#page").val();
+			if(isPositiveNum(pageNumber) && pageNumber　>= 1 &&　pageNumber <= totel){
+				showPageFunction.getItems(pageNumber);
+			} else {
+				$.messager.alert('警告框','输入不合法！','warning');
+				//alert("输入不合法！");
+			}
+		});
+		$("#all_").click(function(){
+			itemPage.getItems(1);
+		});
+		$("#up_").click(function(){
+			itemPage.getItemsByStatus(1,0);
+		});
+		$("#down_").click(function(){
+			itemPage.getItemsByStatus(1,1);
+		});
+		$("#search").click(function(){
+			name=$("#searchName").val();
+			itemPage.getItemsByName(1);
+		});
+		$("tbody").on('click','.layui-btn.layui-btn-danger.layui-btn-mini',function(){
+			var id = this.dataset.value;
+			$.messager.confirm('确认框','您确定要修改吗！',function(flag){
+				if(flag){
+					$.get("/QiuLuPC-Manager/sku/change",{"id":id},function(result){
+					if(result.object == 0){
+						$("#"+id+"s")[0].innerHTML="下架";
+						$("#"+id)[0].innerHTML="<img src='../images/yes.gif' />";
+					} else {
+						$("#"+id+"s")[0].innerHTML="上架";
+						$("#"+id)[0].innerHTML="<img src='../images/no.gif' />";
+					}
+				});
+				}
+			})
+		});
+		$("tbody").on('click','.layui-btn.layui-btn-normal.layui-btn-mini',function(){
+			var id = this.dataset.value;
+			location.href="editcommodity.html?itemId="+id
+		})
+		function isPositiveNum(s){//是否为正整数  
+		    var re = /^[0-9]*[1-9][0-9]*$/ ;  
+		    return re.test(s)  
+		};
+	});
+</script>
+<body>
+
+	<div class="location">管理中心-商品管理</div>
+	<div class="main">
+		<div class="serchs">
+				<input type="text" name="" id="searchName" value="" placeholder="搜索商品"
+					class="serch" /> <input type="submit" value="搜索" class="submit" id="search"/>
+
+				<div class="serch-more">
+					<button class="submit" id="all_">全部商品</button>
+					<button class="submit" id="up_">已上架商品</button>
+					<button class="submit" id="down_">已下架商品</button>
+				</div>
+		</div>
+		<div class="commodity-list">
+			<div class="layui-field-box">
+				<table class="site-table table-hover">
+					<thead>
+						<tr>
+							<th><input type="checkbox" id="selected-all">编号</th>
+							<th>商品名称</th>
+							<th>价格</th>
+							<th>折扣</th>
+							<th>上架</th>
+							<th>销量</th>
+							<th>库存量</th>
+							<th>发货地</th>
+							<th>状态</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><input type="checkbox">444</td>
+							<td>小盆植物</td>
+							<td>20.00</td>
+							<td>3.5</td>
+							<td><img src="../images/yes.gif" /></td>
+							<td>200</td>
+							<td>300</td>
+							<td>无</td>
+							<td><a href="menu.html" target="mainFrame"
+								class="layui-btn layui-btn-normal layui-btn-mini">查看</a> <a
+								href="#" class="layui-btn layui-btn-mini">编辑</a> <a href="#"
+								data-id="1" data-opt="del"
+								class="layui-btn layui-btn-danger layui-btn-mini">下架</a></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox">445</td>
+							<td>小盆植物</td>
+							<td>20.00</td>
+							<td>3.5</td>
+							<td><img src="../images/no.gif" /></td>
+							<td>200</td>
+							<td>300</td>
+							<td>无</td>
+							<td><a href="javascript:void(0);"
+								class="layui-btn layui-btn-normal layui-btn-mini">查看</a> <a
+								href="javascript:void(0);" class="layui-btn layui-btn-mini">编辑</a> <a href="javascript:void(0);"
+								data-id="1" data-opt="del"
+								class="layui-btn layui-btn-danger layui-btn-mini">上架</a></td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="btn_changepage">
+					<a id="totle"></a> <input type="button" name="" id="first" value="首页"
+						class="btn" /> <input type="button" name="" id="pre" value="上一页"
+						class="btn" /> <input type="button" name="" id="next" value="下一页"
+						class="btn" /> <input type="button" name="" id="last" value="尾页"
+						class="btn" /> <input type="text" name="" id="page" value=""
+						style="width: 40px;" /> <input type="button" name="" id="skip"
+						value="跳转" class="btn" />
+				</div>
+				<div class="layui-clear"></div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

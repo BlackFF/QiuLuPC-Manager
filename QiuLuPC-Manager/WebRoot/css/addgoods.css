@@ -1,0 +1,29 @@
+body{
+	background: #eee;
+}
+.location{
+	background: #f8f8f8;
+	padding: 0;
+	line-height: 50px;
+}
+.location span{
+	font-weight: 700;
+	margin-left: 20px;
+	float: left;
+	padding-right: 10px;
+	background: url(../images/line.png) no-repeat center right;
+}
+.goodstop{
+	padding-left: 10px;
+}
+.goodstop ul li{
+	display: block;
+	float: left;
+	line-height: 50px;
+	padding:0  20px;
+}
+.selected{
+	margin-left: 10px;
+	color: #333;
+	background: #eee;
+}

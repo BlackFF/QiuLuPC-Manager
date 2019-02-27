@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<context:property-placeholder location="classpath:db.properties" />
+	<!--扫描dao类  -->
+	<context:component-scan base-package="com.howin.qiulu.dao"></context:component-scan>
+	<!-- 配置数据库连接池 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver}"></property>
+		<property name="url" value="${jdbc.url}"></property>
+		<property name="username" value="${jdbc.username}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+		<!-- 初始化连接大小 -->
+		<property name="initialSize" value="0"></property>
+		<!-- 连接池最大数量 -->
+		<property name="maxActive" value="20"></property>
+		<!-- 连接池最大空闲 -->
+		<property name="maxIdle" value="20"></property>
+		<!-- 连接池最小空闲 -->
+		<property name="minIdle" value="1"></property>
+		<!-- 获取连接最大等待时间 -->
+		<property name="maxWait" value="60000"></property>
+	</bean>
+	<!-- 配置sessionFactory -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="configLocation" value="classpath:hibernate.cfg.xml"></property>
+		<property name="mappingLocations" value="classpath:com/howin/qiulu/pojo/*.hbm.xml"></property>
+	</bean>
+</beans>

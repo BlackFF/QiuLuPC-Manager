@@ -1,0 +1,169 @@
+package com.howin.qiulu.dao.impl;
+
+
+
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
+
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.howin.qiulu.dao.ItemDao;
+import com.howin.qiulu.pojo.Item;
+import com.howin.qiulu.pojo.OnSale;
+import com.howin.qiulu.pojo.Sku;
+/**
+ * 
+* @Title: ItemDaoImpl
+* @Description: 商品持久化层
+* @author 吴磊
+* @date 2017年2月22日上午9:15:23
+ */
+@Repository
+public class ItemDaoImpl implements ItemDao {
+
+	@Autowired
+	private SessionFactory sessionFactory;
+	/**
+	 * 
+	 * @author 吴磊
+	 * @date 2017年2月22日上午9:15:33
+	 * @description 查询指定类目下的所有商品数量
+	 * @param categoryId
+	 * @return
+	 */
+	@Override
+	public int checkCategory(int categoryId) {
+		Session session = sessionFactory.getCurrentSession();
+		String hql = "select count(*) from Item where categoryId=?";
+		Query query = session.createQuery(hql);
+		query.setInteger(0, categoryId);
+		long count = (long) query.uniqueResult();
+		System.out.println(count);
+		return (int) count;
+	}
+	/**
+	 * 
+	 * @author 吴磊
+	 * @date 2017年2月24日下午1:43:20
+	 * @description 
+	 * @param item
+	 * @return
+	 */
+	@Override
+	public Integer saveItem(Item item) {
+		Session session = sessionFactory.getCurrentSession();
+		Integer id = null;
+		id = (Integer) session.save(item);
+		return id;
+	}
+	/**
+	 * 
+	 * @author 吴磊
+	 * @date 2017年2月25日下午1:58:05
+	 * @description 
+	 * @return
+	 */
+	@Override
+	public List<Item> getAllItem(int begin,int erery) {
+		Session session = sessionFactory.getCurrentSession();
+		String hql = "from Item";
+		List<Item> list = session.createQuery(hql).setFirstResult(begin).setMaxResults(erery).list();
+		return list;
+	}
+	/**
+	 * 
+	 * @author 吴磊
+	 * @date 2017年2月25日下午2:09:18
+	 * @description 
+	 * @param id
+	 * @return
+	 */
+	@Override
+	public Item getItemById(int id) {
+		Session session = sessionFactory.getCurrentSession();
+		Item item = (Item) session.get(Item.class, id);
+		return item;
+	}
+	/**
+	 * 
+	 * @author 吴磊
+	 * @date 2017年2月25日下午2:32:27
+	 * @description 
+	 * @return
+	 */
+	@Override
+	public int getCount() {
+		Session session = sessionFactory.getCurrentSession();
+		String hql = "select count(*) from Item";
+		long count = (long) session.createQuery(hql).uniqueResult();
+		return (int) count;
+	}
+	/**
+	 * 
+	 * @author 吴磊
+	 * @date 2017年2月25日下午2:57:28
+	 * @description 
+	 * @param item
+	 */
+	@Override
+	public void updateItem(Item item) {
+		Session session = sessionFactory.getCurrentSession();
+		session.update(item);
+		
+	}
+	@Override
+	public boolean toaddOnSaleSku(Sku sku) {
+		boolean flg=true;
+		Session session = sessionFactory.openSession();
+		Transaction tr=session.beginTransaction();
+		try {
+			
+			session.update(sku);
+		} catch (Exception e) {
+			flg=false;
+		}
+		tr.commit();
+		session.close();
+		return flg;
+	}
+	@Override
+	public boolean toaddOnSale(OnSale sale) {
+		boolean flg=true;
+		Session session = sessionFactory.openSession();
+		Transaction tr=session.beginTransaction();
+		try {
+			session.save(sale);
+			
+		} catch (Exception e) {
+			flg=false;
+		}
+		tr.commit();
+		session.close();
+		return flg;
+	}
+	@Override
+	public Integer endOnSaleSku(Integer skuId) {
+		Timestamp ts = new Timestamp(System.currentTimeMillis()); 
+		Date time=new Date();
+		try {   
+            time = ts;   
+            System.out.println(time);   
+        } catch (Exception e) {   
+            e.printStackTrace();   
+        }  
+		time.getTime();
+		Session session = sessionFactory.openSession();
+		Transaction tr= session.beginTransaction();
+		Integer x=session.createQuery("update Sku s  set s.saleType=0,s.etime=:m where s.id=:i").setParameter("m", time).setParameter("i", skuId).executeUpdate();
+		tr.commit();
+		session.close();
+		return x;
+	}
+
+}

@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-4-11 16:17:51 by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.howin.qiulu.pojo.EvaluationResult" table="evaluation_result" catalog="qiulu">
+        <composite-id name="id" class="com.howin.qiulu.pojo.EvaluationResultId">
+            <key-property name="sellPoint" type="string">
+                <column name="sell_point" />
+            </key-property>
+            <key-property name="simage" type="string">
+                <column name="simage" length="65535" />
+            </key-property>
+            <key-property name="orderId" type="long">
+                <column name="order_id" />
+            </key-property>
+            <key-property name="skuId" type="int">
+                <column name="sku_id" />
+            </key-property>
+            <key-property name="status" type="int">
+                <column name="status" />
+            </key-property>
+            <key-property name="type" type="int">
+                <column name="type" />
+            </key-property>
+             <key-property name="createTime" type="timestamp">
+             	 <column name="create_time" />
+           	</key-property>
+           	<key-property name="username" type="string">
+             	 <column name="username" />
+           	</key-property>
+           	<key-property name="userId" type="int">
+             	 <column name="userId" />
+           	</key-property>
+           	<key-property name="headPort" type="string">
+             	 <column name="head_port" />
+           	</key-property>
+        </composite-id>
+            <property name="commodityScore" type="java.lang.Integer">
+                <column name="commodity_score" />
+            </property>
+            <property name="time" type="timestamp">
+                <column name="time" length="19" />
+            </property>
+            <property name="image" type="string">
+                <column name="image" />
+            </property>
+            <property name="content" type="string">
+                <column name="content" />
+            </property>
+            <property name="etype" type="java.lang.Integer">
+                <column name="etype" />
+            </property>
+    </class>
+</hibernate-mapping>

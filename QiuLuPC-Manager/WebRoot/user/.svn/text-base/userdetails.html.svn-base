@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>用户详情</title>
+<link rel="stylesheet" type="text/css" href="../css/main.css" />
+<link rel="stylesheet" type="text/css" href="../css/layui.css" />
+<link rel="stylesheet" type="text/css" href="../css/menu.css" />
+<link rel="stylesheet" type="text/css" href="../css/global.css" />
+</head>
+<script type="text/javascript" src="../js/base.js"></script>
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		var id = request("id");
+		$.post("/QiuLuPC-Manager/user/get",{"id":id},function(result){
+			var user = result.object.user;
+			var userDetail = result.object.userDetail;
+			var gender = "女";
+			if(userDetail.gender){
+				gender = "男";
+			}
+			$("#name")[0].innerHTML = userDetail.name;
+			$("#gender")[0].innerHTML = gender;
+			$("#birthday")[0].innerHTML = userDetail.birthday;
+			$("#headPort")[0].innerHTML = userDetail.headPort;
+			$("#email")[0].innerHTML = userDetail.email;
+			$("#place")[0].innerHTML = userDetail.province+userDetail.city+userDetail.area;
+			$("#adress")[0].innerHTML = userDetail.adress;
+			$("#vip")[0].innerHTML = userDetail.vip;
+		});
+	});
+</script>
+<body>
+	<div class="location">用户列表-用户详情</div>
+	<div class="commodity-list">
+		<div class="layui-field-box">
+			<table class="table" cellspacing="0">
+				<thead>
+					<tr>
+						<p class="table-top">用户信息</p>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>名字：</td>
+						<td id="name"><em style="color: red">无信息</em></td>
+						<td>性别：</td>
+						<td id="gender"><em style="color: red">无信息</em></td>
+					</tr>
+					<tr>
+						<td>生日：</td>
+						<td id="birthday"><em style="color: red">无信息</em></td>
+						<td>头像：</td>
+						<td id="headPort"><em style="color: red">无信息</em></td>
+					</tr>
+					<tr>
+						<td>邮箱：</td>
+						<td id="email"><em style="color: red">无信息</em></td>
+						<td>所在地：</td>
+						<td id="place"><em style="color: red">无信息</em></td>
+					</tr>
+					<tr>
+						<td>详细地址：</td>
+						<td id="adress"><em style="color: red">无信息</em></td>
+						<td>会员等级：</td>
+						<td id="vip"><em style="color: red">无信息</em></td>
+					</tr>
+					<!--<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>-->
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

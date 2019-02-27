@@ -1,0 +1,171 @@
+package com.howin.qiulu.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.howin.qiulu.pojo.Sku;
+import com.howin.qiulu.result.QiuluResult;
+import com.howin.qiulu.service.SkuService;
+
+/**
+ * 
+* @Title: SkuController
+* @Description: 
+* @author 吴磊
+* @date 2017年2月22日下午1:47:21
+ */
+@Controller
+@RequestMapping("/sku")
+public class SkuController {
+	
+	@Autowired
+	private SkuService skuService;
+	/**
+	 * 
+	 * @author 吴磊
+	 * @date 2017年2月22日下午1:47:25
+	 * @description 
+	 * @param sku
+	 * @return QiuluResult
+	 */
+	@RequestMapping("/save")
+	@ResponseBody
+	public QiuluResult addSku(Sku sku){
+		QiuluResult result = skuService.saveSku(sku);
+		return result;
+	}
+	/**
+	 * 
+	 * @author 吴磊
+	 * @date 2017年2月22日下午2:49:34
+	 * @description 图片上传
+	 * @param image
+	 * @param id
+	 * @return QiuluResult
+	 */
+	@RequestMapping("/upload")
+	@ResponseBody
+	public synchronized QiuluResult uploadImage(MultipartFile image,int id){
+		 QiuluResult result = skuService.uploadImage(image, id);
+		return result;
+	}
+	/**
+	 * 
+	 * @author 吴磊
+	 * @date 2017年2月23日上午9:04:40
+	 * @description 
+	 * @return QiuluResult
+	 */
+	@RequestMapping("/change")
+	@ResponseBody
+	public QiuluResult changeSku(int id){
+		QiuluResult result = skuService.changeStatus(id);
+		return result;
+	}
+	/**
+	 * 
+	 * @author 吴磊
+	 * @date 2017年2月23日上午11:23:25
+	 * @description 删除图片
+	 * @param imageName
+	 * @param id
+	 * @return QiuluResult
+	 */
+	@RequestMapping("/delete")
+	@ResponseBody
+	public QiuluResult deleteImage(String imageName,int id){
+		QiuluResult result = skuService.deleteImage(imageName, id);
+		return result;
+	}
+	/**
+	 * 
+	 * @author 吴磊
+	 * @date 2017年2月24日下午3:40:07
+	 * @description 
+	 * @param dateScope
+	 * @param pageNumber
+	 * @return QiuluResult
+	 */
+	@RequestMapping("/scope")
+	@ResponseBody
+	public QiuluResult getSkuByScope(String dateScope,@RequestParam(defaultValue="1")int pageNumber){
+		QiuluResult result = skuService.getSkuByScope(dateScope, pageNumber);
+		return result;
+	}
+	/**
+	 * 
+	 * @author 吴磊
+	 * @date 2017年2月25日下午3:49:09
+	 * @description 
+	 * @param sku
+	 * @return QiuluResult
+	 */
+	@RequestMapping("/update")
+	@ResponseBody
+	public QiuluResult updateSku(Sku sku){
+		QiuluResult result = skuService.updateSku(sku);
+		return result;
+	}
+	/**
+	 * 
+	 * @author 吴磊
+	 * @date 2017年3月24日上午10:48:05
+	 * @description 
+	 * @param pageNumber
+	 * @param status
+	 * @return QiuluResult
+	 */
+	@RequestMapping("/status")
+	@ResponseBody
+	public QiuluResult getSkuByStatus(@RequestParam(defaultValue="1")int pageNumber,int status){
+		QiuluResult result = skuService.getSkuByStatus(pageNumber, status);
+		return result;
+	}
+	/**
+	 * 
+	 * @author 吴磊
+	 * @date 2017年3月24日上午11:18:50
+	 * @description 
+	 * @param pageNumber
+	 * @param name
+	 * @return QiuluResult
+	 */
+	@RequestMapping("/search")
+	@ResponseBody
+	public QiuluResult searchSku(@RequestParam(defaultValue="1")int pageNumber,String name){
+		QiuluResult result = skuService.searchSku(pageNumber, name);
+		return result;
+	}
+	/**
+	 * 
+	 * @author 吴磊
+	 * @date 2017年3月31日下午2:55:04
+	 * @description 
+	 * @param pageNumber
+	 * @return QiuluResult
+	 */
+	@RequestMapping("/getAll")
+	@ResponseBody
+	public QiuluResult getAllSku(@RequestParam(defaultValue="1")int pageNumber){
+		return skuService.getAllSku(pageNumber);
+	}
+	/**
+	 * 
+	 * @author 吴磊
+	 * @date 2017年4月5日下午3:29:29
+	 * @description 
+	 * @param id
+	 * @return QiuluResult
+	 */
+	@RequestMapping("/get")
+	@ResponseBody
+	public QiuluResult getSkuById(int id){
+		QiuluResult result = skuService.getSkuById(id);
+		return result;
+	}
+	
+}

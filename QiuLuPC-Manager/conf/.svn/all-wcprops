@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/QiuLu/!svn/ver/299/QiuLuPC-Manager/conf
+END
+db.properties
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/QiuLu/!svn/ver/44/QiuLuPC-Manager/conf/db.properties
+END
+applicationContext-service.xml
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/QiuLu/!svn/ver/33/QiuLuPC-Manager/conf/applicationContext-service.xml
+END
+springMVC.xml
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/QiuLu/!svn/ver/299/QiuLuPC-Manager/conf/springMVC.xml
+END
+applicationContext-dao.xml
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/QiuLu/!svn/ver/44/QiuLuPC-Manager/conf/applicationContext-dao.xml
+END
+applicationContext-trans.xml
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/QiuLu/!svn/ver/92/QiuLuPC-Manager/conf/applicationContext-trans.xml
+END
+hibernate.cfg.xml
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/QiuLu/!svn/ver/33/QiuLuPC-Manager/conf/hibernate.cfg.xml
+END

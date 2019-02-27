@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>商品属性</title>
+		<link rel="stylesheet" type="text/css" href="../css/main.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/addgoods.css"/>
+		<!--<link rel="stylesheet" type="text/css" href="../css/classify.css"/>-->
+		
+		<link rel="stylesheet" href="../css/global.css" media="all" />
+		<link rel="stylesheet" type="text/css" href="../css/commodity photos.css"/>
+		<link href="http://www.jq22.com/jquery/bootstrap-3.3.4.css" rel="stylesheet">
+        <link href="../css/fileinput.css" media="all" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="../css/layui.css" media="all" />
+         
+		
+	</head>
+	<body>
+		<form class="layui-form">
+			<div class="location">
+				<span>新增商品</span>
+			</div>
+			<!--通用信息-->
+			<div class="connect">
+				<div action="" method="post" class="addclass layui-form item-table">
+					<div class="select-Category layui-form-ite">
+						<label class="layui-form-label">商品类别</label>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">商品名称</label>
+						<div class="layui-input-block item-Name">
+							<textarea  class="layui-textarea" name="itemName" lay-verify="required|itemname" style="width: 100%; resize: none;"></textarea>
+						</div>
+					</div>
+					<!--商品属性-->	
+					<div class="item-param"></div>
+				</div>
+			</div>
+			
+			<div>
+				<!--详细描述-->
+				<button id="detail-layer" type="button" class="layui-btn layui-btn-primary" >编辑商品详细</button>
+				<textarea id="editor-html" style="display: none;" name="itemDetail"></textarea>
+			</div>
+			<!--sku属性-->
+			<div class="connect">
+				<div action="" method="post" class="addclass layui-form sku-table" >
+				</div>
+				<button type="submit" class="skuXX layui-btn layui-btn-primary" lay-submit lay-filter="carete-skuTable">生成sku集合表格</a>
+			</div>
+			<!--sku组合表格-->
+			<table class="site-table table-hover skuSet-table">
+				<thead>
+					<tr>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+			
+			<button type="submit" class="add layui-btn layui-btn-radius layui-btn-normal" lay-submit lay-filter="save-item">上传商品</button>
+		</form>
+		<!--商品相册-->
+		 <form enctype="multipart/form-data" class="image-Form">
+		 	<div class="form-group">
+            </div> 
+		 </form>
+		 
+		<div id="layer" style="display: none;">
+			<div class="contable layui-form contable" >
+					<div class="layui-form-item">
+					    <label class="layui-form-label">商品价格</label>
+					    <div class="layui-input-block sku-Price">
+					      <input type="num" name="price" required  lay-verify="required|price" placeholder="请输入价格" autocomplete="off" class="layui-input">
+					    </div>
+					  </div>
+				
+				<div class="contable layui-form" >
+					<div class="layui-form-item">
+					    <label class="layui-form-label">库存</label>
+					    <div class="layui-input-block sku-repertory">
+					      <input type="num" name="reportery" required  lay-verify="required|positiveInteger|repertory" placeholder="请输入价格" autocomplete="off" class="layui-input">
+					    </div>
+					  </div>
+				</div>
+				<div class="contable layui-form" >
+					<div class="layui-form-item">
+					    <label class="layui-form-label">库存预警线</label>
+					    <div class="layui-input-block sku-warnRepertory">
+					      <input type="num" name="warn_repertory" required  lay-verify="required|positiveInteger" placeholder="请输入价格" autocomplete="off" class="layui-input">
+					    </div>
+					  </div>
+				</div>
+				<div class="contable layui-form" >
+					<div class="layui-form-item">
+					    <label class="layui-form-label">商品卖点</label>
+					    <div class="layui-input-block sku-sellPoint">
+					    	<textarea name="desc" placeholder="请输入内容" required lay-verify="required" class="layui-textarea"></textarea>
+					    </div>
+					  </div>
+				</div>
+				<div class="contable layui-form" >
+					<div class="layui-form-item">
+					    <label class="layui-form-label">商品发货地</label>
+					    <div class="layui-input-block sku-deliveryPlace" >
+					      <input type="text" name="num" required  lay-verify="required|noSpecial" placeholder="请输入发货地" autocomplete="off" class="layui-input">
+					    </div>
+					  </div>
+				</div>
+				<div class="layui-form-item">
+				    <label class="layui-form-label">是否展示</label>
+				    <div class="layui-input-block sku-status">
+				    	<input type="radio" name="status" value="0" title="上架" checked>
+				    	<input type="radio" name="status" value="1" title="下架">
+				    	<input type="radio" name="status" value="0" title="推荐">
+					</div>
+			  	</div>
+			  	<button type="submit" class="add layui-btn layui-btn-radius layui-btn-normal" lay-submit lay-filter="set-sku">确认修改</button>
+			</div>
+		</div>
+		
+		<script src="../js/jquery-3.2.0.min.js"></script>
+      	<script src="../js/fileinput.min.js" type="text/javascript"></script>
+        <script src="http://www.jq22.com/jquery/bootstrap-3.3.4.js" type="text/javascript"></script>
+		<script src="../layui/layui.js"></script>
+		<script type="text/javascript" src="../js/commodity/classifSelect.js"></script>
+		<script>
+			cateSel.initSelect('.select-Category');
+		</script>
+		<script src="../js/commodity/addcommodity.js"></script>
+		<script>
+		 layui.use([ 'jquery', 'layer','form'],
+			function() {
+				var $ = layui.jquery;
+				var layer = layui.layer;
+				var form = layui.form();
+				
+				$(".skuSet-table").on('click','.edit-SKU',function(event){
+					paramFun.setClickIndex($(".skuSet-table .edit-SKU").index(event.currentTarget));
+					layer.open({
+						type : 1,
+						title : '销售属性',
+						fixed : true,
+						shadeClose : true,
+						shade : 0.3,
+//						area : [ '893px', '600px' ],
+						resize : false,
+						scrollbar : false,
+						content : $('#layer'),
+//						btn : ['确认'],
+//						end:function(){
+//							layer.msg('注册成功！',
+//							{time:1000}
+//							);
+//						}
+						success:function(layero,index){
+							//修改前读取sku数组里的值
+							paramFun.readSKU(layero,index);
+						},
+//						yes:function(index, layero){}
+					});
+				});
+				
+				$('#detail-layer').on('click',function(event){
+					var textarea = $('#editor-html');
+					layer.open({
+						type:2,
+						title:'商品详细',
+						fixed:true,
+						shadeClose:true,
+						shade:0.3,
+						area : [ '90%', '90%' ],
+						resize:false,
+						scrollbar:true,
+						content : '/QiuLuPC-Manager/ueditor/index.html',
+						btn:['保存'],
+						success:function(layero,index){
+							var iframeWindow = window.frames[$('iframe',layero)[0].name];
+							iframeWindow.postMessage($(textarea).html(),"*");
+							console.log('读取detail')
+						}
+						,yes:function(index,layero){
+							console.log('保存detail')
+							
+							$(textarea).html(window.frames[$('iframe',layero)[0].name].getContent());
+							layer.msg('保存成功！',
+							{time:1000}
+							);
+							layer.close(index);
+						}
+					});
+				});
+				
+				form.verify({
+				  itemname: function(value){
+				    if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)){
+				      return '商品名不能有特殊字符';
+				    }
+				    if(/(^\_)|(\__)|(\_+$)/.test(value)){
+				      return '商品名首尾不能出现下划线\'_\'';
+				    }
+				    if(/^\d+\d+\d$/.test(value)){
+				      return '商品名不能全为数字';
+				    }
+				  }
+				  
+				  //我们既支持上述函数式的方式，也支持下述数组的形式
+				  //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
+				  ,pass: [
+				    /^[\S]{6,12}$/
+				    ,'密码必须6到12位，且不能出现空格'
+				  ]
+			   	  ,price:[
+				  	/^(([1-9]\d*)|((0?|[1-9]\d*)(\.[0-9]{1,2})?))$/
+				  	,'价格为整数或两位小数，单位  元'
+				  ]
+				  ,noSpecial:[
+				  	/^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$/
+				  	,'不能有特殊字符'
+				  ]
+			    ,positiveInteger:[
+				  	/^[1-9]\d*$/
+				  	,'必须为正整数'
+				  ]
+			    //库存
+			    ,repertory : function(value){
+			    	var warn_repertory = document.getElementsByName('warn_repertory')[0];
+			    	if(parseInt(value) <= parseInt(warn_repertory.value)){
+			    		return '库存应大于预警线';
+			    	}
+			    }
+				}); 
+				
+				form.on('submit(save-item)', function(data){
+				  paramFun.addItem();
+				  return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+				});
+				form.on('submit(set-sku)',function(data){
+					//保存sku
+					paramFun.saveSKU();
+					layui.use(['jquery','layer'],function(){
+						var $ = layui.jquery;
+						//关闭当前sku弹出层
+						var layer = layui.layer;
+						layer.close(layer.index);
+						layer.msg('保存成功！',
+						{time:1000}
+						);
+					});
+					
+					return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+				});
+				form.on('submit(carete-skuTable)',function(data){
+					
+					var sel = $('.select-Category select');
+					var flag = true;
+					for(var i = 0, len = sel.length; i < len; i ++){
+						if(sel[i].value === ''){
+							sel[i].classList.add('layui-form-danger');
+							flag = false;
+							break;
+						}
+						sel[i].classList.remove('layui-form-danger');
+					}
+					if(!flag){
+						layui.use(['jquery','layer'],function(){
+							var $ = layui.jquery;
+							var layer = layui.layer;
+							layer.alert('请选择一个分类', {
+							  icon: 2,
+							  time: 2000 //2秒关闭（如果不配置，默认是3秒）
+							}, function(){
+							  //do something
+							  return false;
+							});   
+							
+						});
+						return false;
+					}
+					//生成sku组合表
+					paramFun.createSkuSetTable();
+					
+					return false;
+				});
+			});	
+		
+		</script>
+		 <script>
+		  function btup(i,id){
+		    $("#file-div"+i+" #file").fileinput({
+		        uploadUrl: '/QiuLuPC-Manager/sku/upload', // you must set a valid URL here else you will get an error
+		        uploadExtraData : {id:id},
+		        allowedFileExtensions : ['jpg', 'png','gif'],
+		        fileActionSettings : {showUpload : false},
+		        showClose : false,
+		        overwriteInitial: false,
+		        maxFileSize: 1000,
+		        maxFileCount : 3
+		        //allowedFileTypes: ['image', 'video', 'flash'],
+		      
+			});
+		  }
+		  
+		$('.form-group').on('fileuploaded','input', function(event, data, previewId, index) {
+    		 var curr = event.currentTarget;
+		 	setTimeout(function(){
+		 		$(curr).fileinput('disable');
+		 	},400);
+		}); 
+		
+		$('.form-group').on('filepreupload','input',function(event, data, previewId, index){
+			var skuId = data.extra.id;
+			$.ajax({
+				type : 'post',
+				url : '/QiuLuPC-Manager/sku/delete',
+				data : {imageName:'2a0f4705-8f2c-418c-8a66-fef495d4d884.jpg',id:skuId},
+				dataType : 'json',
+				async : true,
+				success : function(data){
+					if(data.status){
+						console.log('先删除默认图片');
+					}
+				}
+			});
+		});
+		 </script> 
+		 <script src="../js/commodity/addcommodity.upload.js"></script>
+	</body>
+</html>

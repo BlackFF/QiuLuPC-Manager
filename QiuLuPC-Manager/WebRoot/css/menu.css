@@ -1,0 +1,50 @@
+.commodity-list{
+	padding: 5px;
+	margin: 0 auto;
+	width: 97%;
+}
+tbody tr td{
+	background: #fff;
+	margin: 0px;
+}
+.table{
+	border-collapse:collapse;
+	width: 100%;
+}
+.table tbody td{
+	padding: 8px 0;
+	border: 1px solid #ddd;
+}
+.table-top{
+	background: #f2f2f2;
+	padding: 5px 0 15px;
+	margin-bottom: -10px;
+	border: 1px solid #ddd;
+	border-bottom:none ;
+	text-align: center;
+	font-size: 16px;
+}
+.table tr td:nth-child(2n+1){
+	text-align: right;
+	padding-right: 10px;
+	font-weight: 700;
+	font-family: "黑体";
+}
+.table tr td:nth-child(2n){
+	text-align: left;
+	background: #fbfbfb;
+	padding-left: 10px;
+}
+.btn_changepage{
+	margin-top: 10px;
+}
+
+/*配送方式页面*/
+.delivery-main{
+	height: auto;
+	padding: 30px 0;
+	display: block;
+}
+.form-group{
+	margin: 20px 0 !important;
+}

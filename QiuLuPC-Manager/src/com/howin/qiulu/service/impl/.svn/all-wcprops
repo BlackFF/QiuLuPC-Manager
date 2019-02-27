@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/QiuLu/!svn/ver/559/QiuLuPC-Manager/src/com/howin/qiulu/service/impl
+END
+CategoryServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/QiuLu/!svn/ver/515/QiuLuPC-Manager/src/com/howin/qiulu/service/impl/CategoryServiceImpl.java
+END
+ItemServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/QiuLu/!svn/ver/538/QiuLuPC-Manager/src/com/howin/qiulu/service/impl/ItemServiceImpl.java
+END
+UserServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/QiuLu/!svn/ver/92/QiuLuPC-Manager/src/com/howin/qiulu/service/impl/UserServiceImpl.java
+END
+SkuServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/QiuLu/!svn/ver/559/QiuLuPC-Manager/src/com/howin/qiulu/service/impl/SkuServiceImpl.java
+END
+EvaluationServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/QiuLu/!svn/ver/172/QiuLuPC-Manager/src/com/howin/qiulu/service/impl/EvaluationServiceImpl.java
+END
+AdminServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/QiuLu/!svn/ver/92/QiuLuPC-Manager/src/com/howin/qiulu/service/impl/AdminServiceImpl.java
+END
+ExpressServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/QiuLu/!svn/ver/559/QiuLuPC-Manager/src/com/howin/qiulu/service/impl/ExpressServiceImpl.java
+END
+OrderServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/QiuLu/!svn/ver/299/QiuLuPC-Manager/src/com/howin/qiulu/service/impl/OrderServiceImpl.java
+END
+RepertoryServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/QiuLu/!svn/ver/468/QiuLuPC-Manager/src/com/howin/qiulu/service/impl/RepertoryServiceImpl.java
+END

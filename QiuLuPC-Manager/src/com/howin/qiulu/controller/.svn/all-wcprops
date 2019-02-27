@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/QiuLu/!svn/ver/559/QiuLuPC-Manager/src/com/howin/qiulu/controller
+END
+OrderController.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/QiuLu/!svn/ver/299/QiuLuPC-Manager/src/com/howin/qiulu/controller/OrderController.java
+END
+RepertoryController.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/QiuLu/!svn/ver/468/QiuLuPC-Manager/src/com/howin/qiulu/controller/RepertoryController.java
+END
+CategoryController.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/QiuLu/!svn/ver/372/QiuLuPC-Manager/src/com/howin/qiulu/controller/CategoryController.java
+END
+ItemController.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/QiuLu/!svn/ver/558/QiuLuPC-Manager/src/com/howin/qiulu/controller/ItemController.java
+END
+UserController.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/QiuLu/!svn/ver/468/QiuLuPC-Manager/src/com/howin/qiulu/controller/UserController.java
+END
+SkuController.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/QiuLu/!svn/ver/515/QiuLuPC-Manager/src/com/howin/qiulu/controller/SkuController.java
+END
+EvaluationController.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/QiuLu/!svn/ver/299/QiuLuPC-Manager/src/com/howin/qiulu/controller/EvaluationController.java
+END
+AdminController.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/QiuLu/!svn/ver/515/QiuLuPC-Manager/src/com/howin/qiulu/controller/AdminController.java
+END
+ExpressController.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/QiuLu/!svn/ver/559/QiuLuPC-Manager/src/com/howin/qiulu/controller/ExpressController.java
+END

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+</head>
+<link rel="stylesheet" type="text/css" href="css/top.css" />
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js">
+</script>
+<script type="text/javascript">
+</script>
+<script type="text/javascript">
+	$(function(){
+		var id;
+		$.post("/QiuLuPC-Manager/admin/getAdmin",{},function(result){
+			if(result.status){
+				$("#admin").append(result.object.account);
+				id=result.object.id;
+				$("#admin").attr("href","user/manager.html?id="+id);
+			} else {
+				alert("請求失敗");
+			}
+		})
+		$("#logout").click(function(){
+			if(window.confirm("您确定要退出吗！")){
+				$.post("/QiuLuPC-Manager/admin/logout",{},function(result){
+					if(result.status){
+						top.location.href="/QiuLuPC-Manager/login.html";
+					} else {
+						alert("退出失败");
+					}
+				});
+			} else {
+				
+			}
+		});
+	});
+</script>
+<body>
+	<div class="main">
+		<img src="images/logo.png" class="logo" /> <span class="logo-name">秋露商城后台管理</span>
+		<div class="user">
+			<div class="name">
+				用户名：<a id="admin" target="mainFrame"></a>
+			</div>
+			<div class="logout">
+				<img src="images/logout.png" id="logout"/>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

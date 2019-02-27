@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC >
+<html>
+<head>
+	<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="css/left.css"/>
+</head>
+<body >
+
+	<div class="leftsidebar_box">
+		<dl >
+			<dt onClick="changeImage()"><a href="welcome.html" target="mainFrame">首页</a></dt>
+		</dl>
+		<dl >
+			<dt>管理中心</dt>
+			<dd><a href="user/userlist.html" target="mainFrame">用户列表</a></dd>
+			<dd class="first_dd"><a href="commodity/commodity.html" target="mainFrame">商品列表</a></dd>
+			<dd><a href="classify/classify.html" target="mainFrame">分类管理</a></dd>
+			<dd><a href="orderform/orderlist.html" target="mainFrame">订单列表</a></dd>
+			<dd><a href="orderform/orderstatistics.html" target="mainFrame">订单统计</a></dd>
+			<dd><a href="commodity/addcommodity.html" target="mainFrame">添加新商品</a></dd>
+			<dd><a href="commodity/inventorylist.html" target="mainFrame">商品库存</a></dd>
+			
+		</dl>
+	</div>
+
+</div>
+
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript">
+		$(".leftsidebar_box dt").css({"background-color":"#41576e"});
+		$(".leftsidebar_box dt img").attr("src");
+		$(function(){
+			$(".leftsidebar_box dd").hide();
+			$(".leftsidebar_box dt").click(function(){
+				$(".leftsidebar_box dt").css({"background-color":"#41576e"})
+				$(this).css({"background-color": "#3d5169"});
+				$(this).parent().find('dd').removeClass("menu_chioce");
+				$(".leftsidebar_box dt img").attr("src");
+				$(this).parent().find('img').attr("src");
+				$(".menu_chioce").slideUp(); 
+				$(this).parent().find('dd').slideToggle();
+				$(this).parent().find('dd').addClass("menu_chioce");
+			});
+		})
+	</script>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>库存列表</title>
+<link rel="stylesheet" href="../css/layui.css" media="all" />
+<link rel="stylesheet" href="../css/global.css" media="all">
+<link rel="stylesheet" type="text/css" href="../date/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="../css/main.css" />
+<script type="text/javascript" src="../easyui/jquery.min.js"></script>
+<script type="text/javascript" src="../easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../easyui/locale/easyui-lang-zh_CN.js"></script>
+<link rel="stylesheet" type="text/css" href="../easyui/themes/default/easyui.css" />
+<link rel="stylesheet" type="text/css" href="../easyui/themes/icon.css" />
+</head>
+
+<!-- <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>-->
+<script type="text/javascript"> 
+	$(function(){
+		var cruRep;
+		var type =0;
+		var type_change;
+		function pageFunction(pageNumber,type){
+			$.post("/QiuLuPC-Manager/repertory",{"pageNumber":pageNumber,"type":type},function(result){
+				var data = result.object.list;
+				var repView;
+				for(var i=0;i<data.length;i++){
+					repView = repView+"<tr><td>"+data[i].id+"</td><td>"+data[i].sellPoint+"</td><td>"+data[i].repertory+"</td><td>"
+					+data[i].warnRepertory+"</td>"+'<td><a class="layui-btn layui-btn-mini" id='+data[i].id+'>增加库存</a> <a class="layui-btn layui-btn-mini" id='+data[i].id+' value='+data[i].repertory+'>减少库存</a></td></tr>';
+				}
+				if(!result.object.hasPrePage){
+					$("#pre")[0].disabled=true;
+				} else {
+					$("#pre")[0].disabled=false;
+				}
+				if(!result.object.hasNextPage){
+					$("#next")[0].disabled=true;
+				} else {
+					$("#next")[0].disabled=false;
+				}
+				totel = result.object.totalPage;
+				curpage = result.object.beginPage;
+				$("tbody").empty();
+				$("tbody").append(repView);
+				$("#totle")[0].innerHTML="共"+result.object.totalPage+"页,当前"+result.object.beginPage+"页";
+			})
+		}
+		function changeRep(id,repertory,type){
+			$.post("/QiuLuPC-Manager/repertory/update",{"id":id,"repertory":repertory,"type":type},function(result){
+				if(result.status){
+					$.messager.alert('消息框','修改成功！','info',function(){
+						location.href="inventorylist.html";
+					});
+					//alert("修改成功！");
+					//location.href="inventorylist.html";
+				}
+			});
+		}
+		var id;
+		$("tbody").on("click",".layui-btn.layui-btn-mini",function(){
+			id=this.id;
+			cruRep = $("#"+id).parent().prev().prev().text();
+			var text = this.text;
+			if(text == "增加库存"){
+				type_change=1;
+				$("#add").css("display","block");
+			}
+			if(text == "减少库存"){
+				type_change=0;
+				$("#de").css("display","block");
+			}
+			
+		});
+		$("#sub_add").click(function(){
+			var repertory = $("#add_val").val();
+			if(isPositiveNum(repertory)){
+				if(parseInt(repertory) +parseInt(cruRep)<= 10000){
+					changeRep(id,repertory,type_change);
+				} else {
+					$.messager.alert('警告框',"库存范围为0—10000!","warning");
+				}
+			} else {
+				$.messager.alert('警告框',"输入不合法","warning");
+				//alert("输入不合法");
+			}
+			
+		});
+		$("#sub_de").click(function(){
+			var repertory = $("#de_val").val();
+			if(isPositiveNum(repertory)){
+				if(0 <= parseInt(cruRep)-parseInt(repertory)){
+					changeRep(id,repertory,type_change);
+				} else {
+					$.messager.alert('警告框',"库存范围为0—10000!","warning");
+				}
+			} else {
+				$.messager.alert('警告框',"输入不合法","warning");
+				//alert("输入不合法");
+			}
+		});
+		$(".btn-warning.btn.btn-block").click(function(){
+			$(".delivery-main").css("display","none");
+		});
+		$("#all").click(function(){
+			type = 0;
+			pageFunction(1,type);
+		});
+		$("#warn").click(function(){
+			type = 1;
+			pageFunction(1,type);
+		});
+		$("#first").click(function(){
+			pageFunction(1,type);
+		});
+		$("#last").click(function(){
+			pageFunction(totel,type);
+		});
+		$("#pre").click(function(){
+			pageFunction(curpage-1,type);
+		});
+		$("#next").click(function(){
+			pageFunction(curpage+1,type);
+		});
+		$("#skip").click(function(){
+			var pageNumber = $("#page").val();
+			if(isPositiveNum(pageNumber) && pageNumber　>= 1 &&　pageNumber <= totel){
+				pageFunction(pageNumber,type);
+			} else {
+				$.messager.alert('警告框',"输入不合法","warning");
+				//alert("输入不合法！");
+			}
+		});
+		function isPositiveNum(s){//是否为正整数  
+		    var re = /^[0-9]*[1-9][0-9]*$/ ;  
+		    return re.test(s)  
+		};
+		pageFunction(1,type);
+	});
+</script>
+<body>
+	<div class="location">管理中心-库存列表</div>
+	<div class="main">
+		<div class="commodity-list">
+			<div class="layui-field-box">
+				<span class="submit" id="all">所有库存&nbsp;&nbsp;&nbsp;</span> <span
+					class="submit" id="warn">低于警戒线库存</span>
+				<table class="site-table table-hover">
+					<thead>
+						<tr>
+							<th class="text-center text700">编号</th>
+							<th class="text-center text700">商品名称</th>
+							<th class="text-center text700">库存量</th>
+							<th class="text-center text700">警戒线</th>
+							<th class="text-center text700">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>444</td>
+							<td>小盆植物</td>
+							<td>300</td>
+							<td>20</td>
+							<td><a class="layui-btn layui-btn-mini">增加库存</a> <a
+								class="layui-btn layui-btn-mini">减少库存</a></td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="btn_changepage">
+					<a id="totle"></a> <input type="button" name="" id="first" value="首页"
+						class="btn" /> <input type="button" name="" id="pre" value="上一页"
+						class="btn" /> <input type="button" name="" id="next" value="下一页"
+						class="btn" /> <input type="button" name="" id="last" value="尾页"
+						class="btn" /> <input type="text" name="" id="page" value=""
+						style="width: 40px;" /> <input type="button" name="" id="skip"
+						value="跳转" class="btn" />
+				</div>
+				<div class="layui-clear"></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="delivery-main" style="display: none;" id="add">
+		<div class="form-group">
+			<div class="col-xs-12">
+				增加的库存量 <input type="text" class="form-control" id="add_val"/>
+			</div>
+		</div>
+		<div class="col-xs-6">
+			<button class="btn-info btn btn-block" id="sub_add">提交</button>
+		</div>
+		<div class="col-xs-6">
+			<button class="btn-warning btn btn-block" id="cancel">取消</button>
+		</div>
+	</div>
+	<div class="delivery-main" style="display: none;" id="de">
+		<div class="form-group">
+			<div class="col-xs-12">
+				减少的库存量 <input type="text" class="form-control" id="de_val"/>
+			</div>
+		</div>
+		<div class="col-xs-6">
+			<button class="btn-info btn btn-block" id="sub_de">提交</button>
+		</div>
+		<div class="col-xs-6">
+			<button class="btn-warning btn btn-block" id="cancel">取消</button>
+		</div>
+	</div>
+</body>
+</html>

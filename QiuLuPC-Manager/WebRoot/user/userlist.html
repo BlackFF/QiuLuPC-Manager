@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>用户列表</title>
+<link rel="stylesheet" type="text/css" href="../css/main.css" />
+<link rel="stylesheet" href="../css/layui.css" media="all" />
+<link rel="stylesheet" href="../css/global.css" media="all">
+</head>
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		var totel;
+		var curpage;
+		function pageFunction(pageNumber){
+			$.post("/QiuLuPC-Manager/user/list",{"pageNumber":pageNumber},function(result){
+				$("tbody").empty();
+				var users = result.object.list;
+				var userView;
+				for(var i=0;i<users.length;i++){
+					userView = userView +'<tr><td>'+users[i].id
+					+'</td><td>'+users[i].username+'</td><td>'
+					+users[i].telephone+'</td><td><a href="userdetails.html?id='+users[i].id+'" class="layui-btn layui-btn-normal layui-btn-mini" id='
+					+users[i].id+'>查看</a></td></tr>';
+				}
+				if(!result.object.hasPrePage){
+					$("#pre")[0].disabled=true;
+				} else {
+					$("#pre")[0].disabled=false;
+				}
+				if(!result.object.hasNextPage){
+					$("#next")[0].disabled=true;
+				} else {
+					$("#next")[0].disabled=false;
+				}
+				totel = result.object.totalPage;
+				curpage = result.object.beginPage;
+				$("tbody").empty();
+				$("tbody").append(userView);
+				$("#totle")[0].innerHTML="共"+result.object.totalPage+"页,当前"+result.object.beginPage+"页";
+			});
+		}
+		pageFunction(1);
+		$("#first").click(function(){
+			pageFunction(1);
+		});
+		$("#last").click(function(){
+			pageFunction(totel);
+		});
+		$("#pre").click(function(){
+			pageFunction(curpage-1);
+		});
+		$("#next").click(function(){
+			pageFunction(curpage+1);
+		});
+		$("#skip").click(function(){
+			var pageNumber = $("#page").val();
+			if(isPositiveNum(pageNumber) && pageNumber　>= 1 &&　pageNumber <= totel){
+				pageFunction(pageNumber);
+			} else {
+				alert("输入不合法！");
+			}
+		});
+		function isPositiveNum(s){//是否为正整数  
+		    var re = /^[0-9]*[1-9][0-9]*$/ ;  
+		    return re.test(s)  
+		};
+	});
+</script>
+<body>
+	<div class="location noselect">管理中心-用户列表</div>
+	<div class="main">
+		<div class="commodity-list">
+			<div class="layui-field-box">
+				<table class="site-table table-hover">
+					<thead>
+						<tr>
+							<th class="noselect">用户ID</th>
+							<th class="noselect">用户名</th>
+							<th class="noselect">电话</th>
+							<th class="noselect">查看详情</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><input type="checkbox">444</td>
+							<td>张三</td>
+							<td>13133333333</td>
+							<td><a href="userdetails.html" target="mainFrame"
+								class="layui-btn layui-btn-normal layui-btn-mini">查看</a></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox">445</td>
+							<td>李四</td>
+							<td>13133333333</td>
+							<td><a href=""
+								class="layui-btn layui-btn-normal layui-btn-mini">查看</a></td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="btn_changepage">
+					<a id="totle"></a> <input type="button" name="" id="first" value="首页"
+						class="btn" /> <input type="button" name="" id="pre" value="上一页"
+						class="btn" /> <input type="button" name="" id="next" value="下一页"
+						class="btn" /> <input type="button" name="" id="last" value="尾页"
+						class="btn" /> <input type="text" name="" id="page" value=""
+						style="width: 40px;" /> <input type="button" name="" id="skip"
+						value="跳转" class="btn" />
+				</div>
+				<div class="layui-clear"></div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
