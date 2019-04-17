@@ -40,7 +40,7 @@ public class AdminController {
 		QiuluResult result = adminService.login(admin);
 		if(result.isStatus()){
 			Admin adminResult = (Admin)result.getObject();
-			adminResult.setPassword(null);
+			adminResult.setPassword(null);  
 			//session.invalidate();
 			session.setAttribute("admin",adminResult);
 			result.setObject(null);
